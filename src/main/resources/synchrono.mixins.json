@@ -1,0 +1,12 @@
+{
+	"required": true,
+	"package": "xyz.verarr.synchrono.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ExampleMixin",
+		"ServerLevelMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
