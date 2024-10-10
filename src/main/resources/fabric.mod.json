@@ -13,21 +13,14 @@
 	},
 	"license": "LGPL-3.0-or-later",
 	"icon": "assets/synchrono/icon.png",
-	"environment": "*",
+	"environment": "server",
 	"entrypoints": {
 		"main": [
 			"xyz.verarr.synchrono.Synchrono"
-		],
-		"client": [
-			"xyz.verarr.synchrono.SynchronoClient"
 		]
 	},
 	"mixins": [
-		"synchrono.mixins.json",
-		{
-			"config": "synchrono.client.mixins.json",
-			"environment": "client"
-		}
+		"synchrono.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.5",
