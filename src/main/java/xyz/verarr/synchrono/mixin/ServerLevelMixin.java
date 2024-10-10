@@ -68,7 +68,10 @@ public abstract class ServerLevelMixin {
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void periodicallyUpdateTime(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        if (worldProperties.getTime() % 12000 == 0) {
+        if (
+                (worldProperties.getTime() % 12000 == 0) ||
+                        SynchronoConfig.brute_force
+        ) {
             updateTime();
         }
     }
