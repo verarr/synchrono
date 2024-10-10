@@ -105,10 +105,22 @@ public class IRLTimeManager extends PersistentState {
             ticks += (long) (TICKS_PER_HALF_DAY * tick_scalar);
         }
 
+        if (SynchronoConfig.invert) ticks += TICKS_PER_HALF_DAY;
+
         return ticks;
     }
 
     public int daytimeTicksAt(LocalDateTime dateTime) {
+        if (!SynchronoConfig.invert) return hardDaytimeTicksAt(dateTime);
+        else return hardNighttimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
+    }
+
+    public int nighttimeTicksAt(LocalDateTime dateTime) {
+        if (!SynchronoConfig.invert) return hardNighttimeTicksAt(dateTime);
+        else return hardDaytimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
+    }
+
+    private int hardDaytimeTicksAt(LocalDateTime dateTime) {
         LocalDate yesterday, today, tomorrow;
         yesterday = dateTime.minusDays(1).toLocalDate();
         today = dateTime.toLocalDate();
@@ -132,7 +144,7 @@ public class IRLTimeManager extends PersistentState {
         }
     }
 
-    public int nighttimeTicksAt(LocalDateTime dateTime) {
+    private int hardNighttimeTicksAt(LocalDateTime dateTime) {
         LocalDate yesterday, today, tomorrow;
         yesterday = dateTime.minusDays(1).toLocalDate();
         today = dateTime.toLocalDate();
