@@ -3,7 +3,7 @@
 	"id": "synchrono",
 	"version": "${version}",
 	"name": "Synchrono",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A mod for Minecraft that syncs the in-game daylight cycle to a location in real life.",
 	"authors": [
 		"Me!"
 	],
