@@ -13,7 +13,7 @@
 	},
 	"license": "LGPL-3.0-or-later",
 	"icon": "assets/synchrono/icon.png",
-	"environment": "server",
+	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"xyz.verarr.synchrono.Synchrono"
