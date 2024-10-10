@@ -31,6 +31,9 @@ public class SynchronoConfig extends MidnightConfig {
     @Comment(category = TIME) public static Comment invert_description;
     @Entry(category = TIME) public static boolean invert = false;
 
+    @Comment(category = GAME_TIME) public static Comment gametime_enabled_description;
+    @Entry(category = GAME_TIME) public static boolean gametime_enabled = true;
+
     @Comment(category = DEBUG) public static Comment debug_description;
 
     @Comment(category = DEBUG) public static Comment debug_spacer1;
