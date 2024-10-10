@@ -49,12 +49,16 @@ public abstract class ServerLevelMixin {
         LocalDateTime now = LocalDateTime.now(irlTimeManager.timezone);
         int daytime = irlTimeManager.daytimeTicksAt(now);
         int nighttime = irlTimeManager.nighttimeTicksAt(now);
-        Synchrono.LOGGER.info("Setting time rate: {} {}", daytime, nighttime);
-        timeManager.setTimeRate(daytime, nighttime);
+        if (SynchronoConfig.set_rate) {
+            Synchrono.LOGGER.info("Setting time rate: {} {}", daytime, nighttime);
+            timeManager.setTimeRate(daytime, nighttime);
+        }
 
         long ticks = irlTimeManager.tickAt(LocalDateTime.now(irlTimeManager.timezone));
-        Synchrono.LOGGER.info("Time is: {}", ticks);
-        this.worldProperties.setTimeOfDay(ticks);
+        if (SynchronoConfig.set_time) {
+            Synchrono.LOGGER.info("Time is: {}", ticks);
+            this.worldProperties.setTimeOfDay(ticks);
+        }
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
