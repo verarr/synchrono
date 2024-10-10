@@ -34,13 +34,18 @@ public class SynchronoConfig extends MidnightConfig {
     @Comment(category = GAME_TIME) public static Comment gametime_enabled_description;
     @Entry(category = GAME_TIME) public static boolean gametime_enabled = true;
 
+    @Comment(category = GAME_TIME) public static Comment gametime_spacer1;
+
+    @Comment(category = GAME_TIME, centered = true) public static Comment time_modifiers_title;
+    @Comment(category = GAME_TIME) public static Comment time_modifiers_description;
+    @Comment(category = GAME_TIME) public static Comment time_modifiers_description_spacer;
+    @Entry(category = GAME_TIME) public static float scalar = 1.0f;
+    @Entry(category = GAME_TIME) public static int offset_ticks = 0;
+
     @Comment(category = DEBUG) public static Comment debug_description;
 
     @Comment(category = DEBUG) public static Comment debug_spacer1;
 
-    @Comment(category = DEBUG, centered = true) public static Comment time_modifiers_title;
-    @Entry(category = DEBUG) public static float scalar = 1.0f;
-    @Entry(category = DEBUG) public static int offset_seconds = 0;
     @Entry(category = DEBUG) public static boolean brute_force = false;
 
     @Comment(category = DEBUG) public static Comment debug_spacer2;
