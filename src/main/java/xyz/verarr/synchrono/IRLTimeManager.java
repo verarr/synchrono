@@ -93,6 +93,8 @@ public class IRLTimeManager extends PersistentState {
         }
 
         if (SynchronoConfig.invert) ticks += TICKS_PER_HALF_DAY;
+        ticks = Math.round(ticks * SynchronoConfig.scalar);
+        ticks += SynchronoConfig.offset_ticks;
 
         return ticks;
     }
