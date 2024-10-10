@@ -3,15 +3,15 @@
 	"id": "synchrono",
 	"version": "${version}",
 	"name": "Synchrono",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A mod for Minecraft that syncs the in-game daylight cycle to a location in real life.",
 	"authors": [
-		"Me!"
+		"verarr"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/verarr/synchrono"
 	},
-	"license": "CC0-1.0",
+	"license": "LGPL-3.0-or-later",
 	"icon": "assets/synchrono/icon.png",
 	"environment": "*",
 	"entrypoints": {
@@ -35,9 +35,6 @@
 		"java": ">=21",
 		"fabric-api": "*",
 		"customtimecycle": ">=0.1.1-1.21"
-	},
-	"suggests": {
-		"another-mod": "*"
 	},
 	"conflicts": {
 		"customtimecycle": [
