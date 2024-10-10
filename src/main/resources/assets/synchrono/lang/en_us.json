@@ -17,6 +17,9 @@
   "synchrono.midnightconfig.invert_description": "Turn daytime into nighttime and vice-versa",
   "synchrono.midnightconfig.invert": "Invert daytime",
 
+  "synchrono.midnightconfig.gametime_enabled_description": "Enable modifying in-game time and daylight cycle",
+  "synchrono.midnightconfig.gametime_enabled": "Enabled",
+
   "synchrono.midnightconfig.debug_description": "Options meant for debugging or advanced usage",
 
   "synchrono.midnightconfig.time_modifiers_title": "Time modifiers",
