@@ -29,7 +29,7 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         env:
-          USERNAME: ${{ secrets.USERNAME }}
+          USERNAME: ${{ variable.USERNAME }}
           TOKEN: ${{ secrets.TOKEN }}
         run: ./gradlew build
       - name: capture build artifacts
