@@ -17,6 +17,8 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.Function;
+import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI;
+import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI.SunriseSunsetData;
 
 public class IRLTimeManager extends PersistentState {
     private static final String FIRST_START_DATE_NBT_TAG = "first_start_date";
@@ -24,16 +26,9 @@ public class IRLTimeManager extends PersistentState {
     private static final int TICKS_PER_HALF_DAY = TICKS_PER_DAY / 2;
     private static final int SERVER_TICKS_PER_SECOND = 20;
 
-    public static final String API_URL = "https://api.sunrisesunset.io/json";
-
     public LocalDate firstStartDate;
     public ZoneId timezone;
     private Map<LocalDate, SunriseSunsetData> sunriseSunsetDataCache = new HashMap<>();
-
-    private static class SunriseSunsetData {
-        public LocalTime sunrise;
-        public LocalTime sunset;
-    }
 
     public IRLTimeManager() {
         this.timezone = ZoneId.of(SynchronoConfig.timezone);
@@ -64,7 +59,7 @@ public class IRLTimeManager extends PersistentState {
         if (sunriseSunsetDataCache.containsKey(tomorrow)) return;
 
         SunriseSunsetData tomorrow_data;
-        tomorrow_data = queryAPI(tomorrow, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
+        tomorrow_data = SunriseSunsetAPI.queryAPI(tomorrow, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
 
         sunriseSunsetDataCache.put(tomorrow, tomorrow_data);
     }
@@ -80,7 +75,7 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> queryAPI(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
+        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.queryAPI(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
         yesterday_data = sunriseSunsetDataCache.computeIfAbsent(yesterday, queryAPIFunction);
         today_data = sunriseSunsetDataCache.computeIfAbsent(today, queryAPIFunction);
         tomorrow_data = sunriseSunsetDataCache.computeIfAbsent(tomorrow, queryAPIFunction);
@@ -127,7 +122,7 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> queryAPI(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
+        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.queryAPI(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
         yesterday_data = sunriseSunsetDataCache.computeIfAbsent(yesterday, queryAPIFunction);
         today_data = sunriseSunsetDataCache.computeIfAbsent(today, queryAPIFunction);
         tomorrow_data = sunriseSunsetDataCache.computeIfAbsent(tomorrow, queryAPIFunction);
@@ -151,7 +146,7 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> queryAPI(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
+        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.queryAPI(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
         yesterday_data = sunriseSunsetDataCache.computeIfAbsent(yesterday, queryAPIFunction);
         today_data = sunriseSunsetDataCache.computeIfAbsent(today, queryAPIFunction);
         tomorrow_data = sunriseSunsetDataCache.computeIfAbsent(tomorrow, queryAPIFunction);
@@ -166,63 +161,5 @@ public class IRLTimeManager extends PersistentState {
             // update next nighttime aka today and tomorrow
             return (int) Duration.between(yesterday.atTime(today_data.sunset), today.atTime(tomorrow_data.sunrise)).toSeconds() * SERVER_TICKS_PER_SECOND;
         }
-    }
-
-    private static @NotNull SunriseSunsetData queryAPI(LocalDate date, double latitude, double longitude, ZoneId timezone) {
-        SunriseSunsetData data = new SunriseSunsetData();
-
-        URI uri;
-        try {
-            Formatter formatter = new Formatter(Locale.ROOT);
-            uri = new URI(API_URL + formatter.format("?lat=%f&lng=%f&timezone=%s&time_format=24", latitude, longitude, timezone));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
-
-        HttpURLConnection conn;
-        try {
-            conn = (HttpURLConnection) uri.toURL().openConnection();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            conn.setRequestMethod("GET");
-        } catch (ProtocolException e) {
-            throw new RuntimeException(e);
-        }
-
-        StringBuilder result = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(conn.getInputStream()))) {
-            for (String line; (line = reader.readLine()) != null; ) {
-                result.append(line);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        JsonObject jsonObject;
-        try {
-            jsonObject = JsonParser.parseString(result.toString()).getAsJsonObject();
-        } catch (JsonSyntaxException e) {
-            throw new RuntimeException(e + " URL: " + uri.toString() + " JSON: " + result.toString());
-        }
-
-        if (!jsonObject.get("status").getAsString().equals("OK")) {
-            throw new RuntimeException("Not OK Json from API: " + jsonObject.toString());
-        }
-
-        JsonObject results = jsonObject.get("results").getAsJsonObject();
-        LocalTime sunrise, sunset;
-        try {
-            sunrise = LocalTime.parse(results.get(SynchronoConfig.sunrise_property).getAsString());
-            sunset = LocalTime.parse(results.get(SynchronoConfig.sunset_property).getAsString());
-        } catch (UnsupportedOperationException e) {
-            throw new RuntimeException(e + " JSON: " + result.toString());
-        }
-
-        data.sunrise = sunrise;
-        data.sunset = sunset;
-
-        return data;
     }
 }
