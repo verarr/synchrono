@@ -49,4 +49,8 @@ public class SynchronoConfig extends MidnightConfig {
     @Comment(category = DEBUG) public static Comment api_properties_description;
     @Entry(category = DEBUG) public static String sunrise_property = "sunrise";
     @Entry(category = DEBUG) public static String sunset_property = "sunset";
+
+    @Comment(category = DEBUG, centered = true) public static Comment debug_toggles_title;
+    @Entry(category = DEBUG) public static boolean set_time = true;
+    @Entry(category = DEBUG) public static boolean set_rate = true;
 }
