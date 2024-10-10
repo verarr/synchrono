@@ -22,7 +22,7 @@ import java.util.Locale;
 public class SunriseSunsetAPI {
     private static final String API_URL = "https://api.sunrisesunset.io/json";
 
-    public static @NotNull SunriseSunsetData queryAPI(LocalDate date, double latitude, double longitude, ZoneId timezone) {
+    public static @NotNull SunriseSunsetData query(LocalDate date, double latitude, double longitude, ZoneId timezone) {
         SunriseSunsetData data = new SunriseSunsetData();
 
         URI uri;
