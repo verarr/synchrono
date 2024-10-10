@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.eclipseisoffline.customtimecycle.TimeManager;
 import xyz.verarr.synchrono.IRLTimeManager;
 import xyz.verarr.synchrono.Synchrono;
+import xyz.verarr.synchrono.config.SynchronoConfig;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,16 +43,22 @@ public abstract class ServerLevelMixin {
 
     @Unique
     public void updateTime() {
+        if (!SynchronoConfig.gametime_enabled) return;
+
         TimeManager timeManager = TimeManager.getInstance((ServerWorld) (Object) this);
         LocalDateTime now = LocalDateTime.now(irlTimeManager.timezone);
         int daytime = irlTimeManager.daytimeTicksAt(now);
         int nighttime = irlTimeManager.nighttimeTicksAt(now);
-        Synchrono.LOGGER.info("Setting time rate: {} {}", daytime, nighttime);
-        timeManager.setTimeRate(daytime, nighttime);
+        if (SynchronoConfig.set_rate) {
+            Synchrono.LOGGER.info("Setting time rate: {} {}", daytime, nighttime);
+            timeManager.setTimeRate(daytime, nighttime);
+        }
 
         long ticks = irlTimeManager.tickAt(LocalDateTime.now(irlTimeManager.timezone));
-        Synchrono.LOGGER.info("Time is: {}", ticks);
-        this.worldProperties.setTimeOfDay(ticks);
+        if (SynchronoConfig.set_time) {
+            Synchrono.LOGGER.info("Time is: {}", ticks);
+            this.worldProperties.setTimeOfDay(ticks);
+        }
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))

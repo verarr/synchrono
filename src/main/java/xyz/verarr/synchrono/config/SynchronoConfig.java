@@ -31,6 +31,9 @@ public class SynchronoConfig extends MidnightConfig {
     @Comment(category = TIME) public static Comment invert_description;
     @Entry(category = TIME) public static boolean invert = false;
 
+    @Comment(category = GAME_TIME) public static Comment gametime_enabled_description;
+    @Entry(category = GAME_TIME) public static boolean gametime_enabled = true;
+
     @Comment(category = DEBUG) public static Comment debug_description;
 
     @Comment(category = DEBUG) public static Comment debug_spacer1;
@@ -46,4 +49,10 @@ public class SynchronoConfig extends MidnightConfig {
     @Comment(category = DEBUG) public static Comment api_properties_description;
     @Entry(category = DEBUG) public static String sunrise_property = "sunrise";
     @Entry(category = DEBUG) public static String sunset_property = "sunset";
+
+    @Comment(category = DEBUG) public static Comment debug_spacer3;
+
+    @Comment(category = DEBUG, centered = true) public static Comment debug_toggles_title;
+    @Entry(category = DEBUG) public static boolean set_time = true;
+    @Entry(category = DEBUG) public static boolean set_rate = true;
 }

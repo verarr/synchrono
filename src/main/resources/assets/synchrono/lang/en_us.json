@@ -17,6 +17,9 @@
   "synchrono.midnightconfig.invert_description": "Turn daytime into nighttime and vice-versa",
   "synchrono.midnightconfig.invert": "Invert daytime",
 
+  "synchrono.midnightconfig.gametime_enabled_description": "Enable modifying in-game time and daylight cycle",
+  "synchrono.midnightconfig.gametime_enabled": "Enabled",
+
   "synchrono.midnightconfig.debug_description": "Options meant for debugging or advanced usage",
 
   "synchrono.midnightconfig.time_modifiers_title": "Time modifiers",
@@ -26,5 +29,8 @@
   "synchrono.midnightconfig.api_properties_title": "Specify API Properties",
   "synchrono.midnightconfig.api_properties_description": "Specify which results to retrieve from the API (sunrise = 0t, sunset = 12000t)",
   "synchrono.midnightconfig.sunrise_property": "Sunrise",
-  "synchrono.midnightconfig.sunset_property": "Sunset"
+  "synchrono.midnightconfig.sunset_property": "Sunset",
+  "synchrono.midnightconfig.debug_toggles_title": "Toggles",
+  "synchrono.midnightconfig.set_time": "Set time",
+  "synchrono.midnightconfig.set_rate": "Set rate"
 }
