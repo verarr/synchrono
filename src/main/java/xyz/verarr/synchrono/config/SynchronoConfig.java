@@ -38,6 +38,7 @@ public class SynchronoConfig extends MidnightConfig {
 
     @Comment(category = GAME_TIME, centered = true) public static Comment time_modifiers_title;
     @Comment(category = GAME_TIME) public static Comment time_modifiers_description;
+    @Comment(category = GAME_TIME) public static Comment time_modifiers_description_spacer;
     @Entry(category = GAME_TIME) public static float scalar = 1.0f;
     @Entry(category = GAME_TIME) public static int offset_ticks = 0;
 
