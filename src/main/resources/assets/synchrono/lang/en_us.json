@@ -18,6 +18,7 @@
   "synchrono.midnightconfig.invert": "Invert daytime",
 
   "synchrono.midnightconfig.time_modifiers_title": "Time modifiers",
+  "synchrono.midnightconfig.time_modifiers_description": "These affect in-game tick values after all the calculations were made. You shouldn't really need them, but they are here in case you would like to use them. If your game is crashing because you started it before the first morning, set the offset to 24000 (this adjusts game time a whole day ahead).",
   "synchrono.midnightconfig.scalar": "Scalar",
   "synchrono.midnightconfig.offset_ticks": "Offset (ticks)",
 
