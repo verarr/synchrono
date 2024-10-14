@@ -26,7 +26,6 @@ public class Synchrono implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 
-//		MidnightConfig.init(MOD_ID, SynchronoConfig.class);
 		NewSynchronoConfig.HANDLER.load();
 	}
 }
