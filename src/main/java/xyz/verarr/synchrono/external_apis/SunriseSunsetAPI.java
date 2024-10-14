@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import org.jetbrains.annotations.NotNull;
+import xyz.verarr.synchrono.config.NewSynchronoConfig;
 import xyz.verarr.synchrono.config.SynchronoConfig;
 
 import java.io.BufferedReader;
@@ -68,8 +69,8 @@ public class SunriseSunsetAPI {
         JsonObject results = jsonObject.get("results").getAsJsonObject();
         LocalTime sunrise, sunset;
         try {
-            sunrise = LocalTime.parse(results.get(SynchronoConfig.sunrise_property).getAsString());
-            sunset = LocalTime.parse(results.get(SynchronoConfig.sunset_property).getAsString());
+            sunrise = LocalTime.parse(results.get(NewSynchronoConfig.sunrise_property).getAsString());
+            sunset = LocalTime.parse(results.get(NewSynchronoConfig.sunset_property).getAsString());
         } catch (UnsupportedOperationException e) {
             throw new RuntimeException(e + " JSON: " + result.toString());
         }

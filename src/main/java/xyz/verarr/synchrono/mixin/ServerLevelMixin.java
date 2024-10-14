@@ -50,13 +50,13 @@ public abstract class ServerLevelMixin {
         LocalDateTime now = LocalDateTime.now(irlTimeManager.timezone);
         int daytime = irlTimeManager.daytimeTicksAt(now);
         int nighttime = irlTimeManager.nighttimeTicksAt(now);
-        if (SynchronoConfig.set_rate) {
+        if (NewSynchronoConfig.set_rate) {
             Synchrono.LOGGER.info("Setting time rate: {} {}", daytime, nighttime);
             timeManager.setTimeRate(daytime, nighttime);
         }
 
         long ticks = irlTimeManager.tickAt(LocalDateTime.now(irlTimeManager.timezone));
-        if (SynchronoConfig.set_time) {
+        if (NewSynchronoConfig.set_time) {
             Synchrono.LOGGER.info("Time is: {}", ticks);
             this.worldProperties.setTimeOfDay(ticks);
         }
@@ -71,7 +71,7 @@ public abstract class ServerLevelMixin {
     public void periodicallyUpdateTime(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if (
                 (worldProperties.getTime() % 12000 == 0) ||
-                        SynchronoConfig.brute_force
+                        NewSynchronoConfig.brute_force
         ) {
             updateTime();
         }

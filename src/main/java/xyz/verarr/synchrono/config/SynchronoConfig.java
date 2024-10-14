@@ -13,13 +13,5 @@ import java.util.List;
 
 public class SynchronoConfig extends MidnightConfig {
     public static final String SS_API = "b_ss_api";
-    public static final String DEBUG = "d_debug";
 
-    @Entry(category = DEBUG) public static boolean brute_force = false;
-
-    @Entry(category = DEBUG) public static String sunrise_property = "sunrise";
-    @Entry(category = DEBUG) public static String sunset_property = "sunset";
-
-    @Entry(category = DEBUG) public static boolean set_time = true;
-    @Entry(category = DEBUG) public static boolean set_rate = true;
 }
