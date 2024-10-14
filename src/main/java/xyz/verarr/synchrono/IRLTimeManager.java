@@ -9,6 +9,7 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.Function;
+
 import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI;
 import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI.SunriseSunsetData;
 
