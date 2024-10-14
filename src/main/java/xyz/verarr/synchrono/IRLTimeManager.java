@@ -4,7 +4,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.world.PersistentState;
 import xyz.verarr.synchrono.config.NewSynchronoConfig;
-import xyz.verarr.synchrono.config.SynchronoConfig;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;

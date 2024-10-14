@@ -20,7 +20,6 @@ import xyz.eclipseisoffline.customtimecycle.TimeManager;
 import xyz.verarr.synchrono.IRLTimeManager;
 import xyz.verarr.synchrono.Synchrono;
 import xyz.verarr.synchrono.config.NewSynchronoConfig;
-import xyz.verarr.synchrono.config.SynchronoConfig;
 
 import java.time.LocalDateTime;
 import java.util.List;

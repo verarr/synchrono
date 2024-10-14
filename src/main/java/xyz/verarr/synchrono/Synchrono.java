@@ -9,7 +9,6 @@ import net.minecraft.server.world.ServerWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import xyz.verarr.synchrono.config.NewSynchronoConfig;
-import xyz.verarr.synchrono.config.SynchronoConfig;
 
 public class Synchrono implements ModInitializer {
 	public static final String MOD_ID = "synchrono";

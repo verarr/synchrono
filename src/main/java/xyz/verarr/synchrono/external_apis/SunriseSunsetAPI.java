@@ -5,7 +5,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import xyz.verarr.synchrono.config.NewSynchronoConfig;
-import xyz.verarr.synchrono.config.SynchronoConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
