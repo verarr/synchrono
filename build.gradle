@@ -29,6 +29,11 @@ repositories {
 	maven {
 		url = "https://api.modrinth.com/maven"
 	}
+
+	maven {
+		name 'Xander Maven'
+		url 'https://maven.isxander.dev/releases'
+	}
 }
 
 loom {
@@ -54,6 +59,7 @@ dependencies {
 
 	modImplementation "xyz.eclipseisoffline:customtimecycle:${project.customtimecycle_version}"
 	modImplementation include ("maven.modrinth:midnightlib:${project.midnightlib_version}")
+	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
 }
 
 processResources {
