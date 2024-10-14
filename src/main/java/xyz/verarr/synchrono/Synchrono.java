@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.server.world.ServerWorld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import xyz.verarr.synchrono.config.NewSynchronoConfig;
 import xyz.verarr.synchrono.config.SynchronoConfig;
 
 public class Synchrono implements ModInitializer {
@@ -26,6 +27,7 @@ public class Synchrono implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 
-		MidnightConfig.init(MOD_ID, SynchronoConfig.class);
+//		MidnightConfig.init(MOD_ID, SynchronoConfig.class);
+		NewSynchronoConfig.HANDLER.load();
 	}
 }
