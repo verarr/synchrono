@@ -1,6 +1,5 @@
 package xyz.verarr.synchrono;
 
-import eu.midnightdust.lib.config.MidnightConfig;
 import net.fabricmc.api.ModInitializer;
 
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -26,6 +25,6 @@ public class Synchrono implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 
-		MidnightConfig.init(MOD_ID, SynchronoConfig.class);
+		SynchronoConfig.HANDLER.load();
 	}
 }

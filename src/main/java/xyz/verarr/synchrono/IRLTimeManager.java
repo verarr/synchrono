@@ -9,6 +9,7 @@ import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.Function;
+
 import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI;
 import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI.SunriseSunsetData;
 
@@ -105,7 +106,7 @@ public class IRLTimeManager extends PersistentState {
         if (!SynchronoConfig.invert) daytime_ticks = hardDaytimeTicksAt(dateTime);
         else daytime_ticks = hardNighttimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
 
-        daytime_ticks = Math.round(daytime_ticks / SynchronoConfig.scalar);
+        daytime_ticks = (int) Math.round(daytime_ticks / SynchronoConfig.scalar);
 
         return daytime_ticks;
     }
@@ -116,7 +117,7 @@ public class IRLTimeManager extends PersistentState {
         if (!SynchronoConfig.invert) nighttime_ticks = hardNighttimeTicksAt(dateTime);
         else nighttime_ticks = hardDaytimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
 
-        nighttime_ticks = Math.round(nighttime_ticks / SynchronoConfig.scalar);
+        nighttime_ticks = (int) Math.round(nighttime_ticks / SynchronoConfig.scalar);
 
         return nighttime_ticks;
     }
