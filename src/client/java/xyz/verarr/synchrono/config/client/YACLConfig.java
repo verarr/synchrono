@@ -2,6 +2,7 @@ package xyz.verarr.synchrono.config.client;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
+import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
 import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
 import dev.isxander.yacl3.impl.controller.StringControllerBuilderImpl;
 import net.minecraft.client.gui.screen.Screen;
@@ -48,9 +49,37 @@ public class YACLConfig extends NewSynchronoConfig {
                     .build())
             .build();
 
+    private static ConfigCategory gametime_category = ConfigCategory.createBuilder()
+            .name(Text.literal("Game Time"))
+            .tooltip(Text.literal("Settings for setting in-game time"))
+            .option(Option.<Boolean>createBuilder()
+                    .name(Text.literal("Enabled"))
+                    .description(OptionDescription.of(Text.literal("Enable setting in-game time")))
+                    .binding(true, () -> set_time, newVal -> set_time = newVal)
+                    .controller(TickBoxControllerBuilder::create)
+                    .build())
+            .group(OptionGroup.createBuilder()
+                    .name(Text.literal("Time modifiers"))
+                    .description(OptionDescription.of(Text.literal("These affect in-game tick values after all the calculations were made. You shouldn't really need them, but they are here in case you would like to use them.")))
+                    .option(Option.<Double>createBuilder()
+                            .name(Text.literal("Scalar"))
+                            .description(OptionDescription.of(Text.literal("Scales the actual tick value. Not very useful.")))
+                            .binding(1d, () -> scalar, newVal -> scalar = newVal)
+                            .controller(DoubleFieldControllerBuilder::create)
+                            .build())
+                    .option(Option.<Integer>createBuilder()
+                            .name(Text.literal("Offset (ticks)"))
+                            .description(OptionDescription.of(Text.literal("Offsets the actual tick value. If your game is crashing because you started it before the first morning, set the offset to 24000 (this adjusts game time a whole day ahead).")))
+                            .binding(0, () -> offset_ticks, newVal -> offset_ticks = newVal)
+                            .controller(IntegerFieldControllerBuilder::create)
+                            .build())
+                    .build())
+            .build();
+
     static YetAnotherConfigLib.Builder builder = YetAnotherConfigLib.createBuilder()
             .title(Text.literal("Used for narration. Could be used to render a title in the future."))
             .category(time_category)
+            .category(gametime_category)
             .save(HANDLER::save);
 
     static Screen getScreen(Screen parentScreen) {

@@ -24,7 +24,7 @@ public class NewSynchronoConfig {
     @SerialEntry public static boolean invert = false;
     @SerialEntry public static boolean gametime_enabled = true;
 
-    @SerialEntry public static float scalar = 1.0f;
+    @SerialEntry public static double scalar = 1.0f;
     @SerialEntry public static int offset_ticks = 0;
 
     @SerialEntry public static boolean brute_force = false;
