@@ -12,16 +12,9 @@ import java.util.List;
  * The config class also has to extend MidnightConfig*/
 
 public class SynchronoConfig extends MidnightConfig {
-    public static final String TIME = "a_time";
     public static final String SS_API = "b_ss_api";
     public static final String GAME_TIME = "c_game_time";
     public static final String DEBUG = "d_debug";
-
-    @Entry(category = TIME, min = -90d, max = 90d) public static double latitude = 51.11d;
-    @Entry(category = TIME, min = -180d, max = 180d) public static double longitude = 17.022222d;
-    @Entry(category = TIME) public static String timezone = "UTC";
-
-    @Entry(category = TIME) public static boolean invert = false;
 
     @Entry(category = GAME_TIME) public static boolean gametime_enabled = true;
 
