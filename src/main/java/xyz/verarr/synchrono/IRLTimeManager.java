@@ -94,8 +94,8 @@ public class IRLTimeManager extends PersistentState {
         }
 
         if (NewSynchronoConfig.invert) ticks += TICKS_PER_HALF_DAY;
-        ticks = Math.round(ticks * SynchronoConfig.scalar);
-        ticks += SynchronoConfig.offset_ticks;
+        ticks = Math.round(ticks * NewSynchronoConfig.scalar);
+        ticks += NewSynchronoConfig.offset_ticks;
 
         return ticks;
     }
@@ -106,7 +106,7 @@ public class IRLTimeManager extends PersistentState {
         if (!NewSynchronoConfig.invert) daytime_ticks = hardDaytimeTicksAt(dateTime);
         else daytime_ticks = hardNighttimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
 
-        daytime_ticks = Math.round(daytime_ticks / SynchronoConfig.scalar);
+        daytime_ticks = (int) Math.round(daytime_ticks / NewSynchronoConfig.scalar);
 
         return daytime_ticks;
     }
@@ -117,7 +117,7 @@ public class IRLTimeManager extends PersistentState {
         if (!NewSynchronoConfig.invert) nighttime_ticks = hardNighttimeTicksAt(dateTime);
         else nighttime_ticks = hardDaytimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
 
-        nighttime_ticks = Math.round(nighttime_ticks / SynchronoConfig.scalar);
+        nighttime_ticks = (int) Math.round(nighttime_ticks / NewSynchronoConfig.scalar);
 
         return nighttime_ticks;
     }
