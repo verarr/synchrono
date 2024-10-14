@@ -7,8 +7,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import com.google.gson.GsonBuilder;
 import net.minecraft.util.Identifier;
 
-public class NewSynchronoConfig {
-    public static ConfigClassHandler<NewSynchronoConfig> HANDLER = ConfigClassHandler.createBuilder(NewSynchronoConfig.class)
+public class SynchronoConfig {
+    public static ConfigClassHandler<SynchronoConfig> HANDLER = ConfigClassHandler.createBuilder(SynchronoConfig.class)
             .id(Identifier.of("synchrono", "synchrono_config"))
                     .serializer(config -> GsonConfigSerializerBuilder.create(config)
                             .setPath(FabricLoader.getInstance().getConfigDir().resolve("synchrono.json5"))

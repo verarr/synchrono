@@ -6,9 +6,9 @@ import dev.isxander.yacl3.gui.controllers.TickBoxController;
 import dev.isxander.yacl3.impl.controller.StringControllerBuilderImpl;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-import xyz.verarr.synchrono.config.NewSynchronoConfig;
+import xyz.verarr.synchrono.config.SynchronoConfig;
 
-public class YACLConfig extends NewSynchronoConfig {
+public class YACLConfig extends SynchronoConfig {
     private static ConfigCategory time_category = ConfigCategory.createBuilder()
             .name(Text.literal("Time"))
             .tooltip(Text.literal("Settings for retrieving real-life time"))
