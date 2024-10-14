@@ -2,7 +2,6 @@ package xyz.verarr.synchrono.config.client;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
-import dev.isxander.yacl3.gui.controllers.TickBoxController;
 import dev.isxander.yacl3.impl.controller.StringControllerBuilderImpl;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
