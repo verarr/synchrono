@@ -17,10 +17,17 @@
 	"entrypoints": {
 		"main": [
 			"xyz.verarr.synchrono.Synchrono"
+		],
+		"client": [
+			"xyz.verarr.synchrono.SynchronoClient"
 		]
 	},
 	"mixins": [
-		"synchrono.mixins.json"
+		"synchrono.mixins.json",
+		{
+			"config": "synchrono.client.mixins.json",
+			"environment": "client"
+		}
 	],
 	"depends": {
 		"fabricloader": ">=0.16.5",
