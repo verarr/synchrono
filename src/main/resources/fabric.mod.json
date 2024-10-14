@@ -18,16 +18,12 @@
 		"main": [
 			"xyz.verarr.synchrono.Synchrono"
 		],
-		"client": [
-			"xyz.verarr.synchrono.SynchronoClient"
+		"modmenu": [
+			"xyz.verarr.synchrono.config.client.ModMenuIntegration"
 		]
 	},
 	"mixins": [
-		"synchrono.mixins.json",
-		{
-			"config": "synchrono.client.mixins.json",
-			"environment": "client"
-		}
+		"synchrono.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.5",

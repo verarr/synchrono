@@ -34,6 +34,11 @@ repositories {
 		name 'Xander Maven'
 		url 'https://maven.isxander.dev/releases'
 	}
+
+	maven {
+		name = "Terraformers"
+		url = "https://maven.terraformersmc.com/"
+	}
 }
 
 loom {
@@ -60,6 +65,7 @@ dependencies {
 	modImplementation "xyz.eclipseisoffline:customtimecycle:${project.customtimecycle_version}"
 	modImplementation include ("maven.modrinth:midnightlib:${project.midnightlib_version}")
 	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
+	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
 
 processResources {
