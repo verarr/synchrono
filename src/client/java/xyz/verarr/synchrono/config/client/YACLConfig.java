@@ -8,7 +8,7 @@ import net.minecraft.text.Text;
 import xyz.verarr.synchrono.config.SynchronoConfig;
 
 public class YACLConfig extends SynchronoConfig {
-    private static ConfigCategory time_category = ConfigCategory.createBuilder()
+    private static final ConfigCategory time_category = ConfigCategory.createBuilder()
             .name(Text.translatable("synchrono.config.time.title"))
             .tooltip(Text.translatable("synchrono.config.time.tooltip"))
             .group(OptionGroup.createBuilder()
@@ -47,7 +47,7 @@ public class YACLConfig extends SynchronoConfig {
                     .build())
             .build();
 
-    private static ConfigCategory gametime_category = ConfigCategory.createBuilder()
+    private static final ConfigCategory gametime_category = ConfigCategory.createBuilder()
             .name(Text.translatable("synchrono.config.gametime.title"))
             .tooltip(Text.translatable("synchrono.config.gametime.tooltip"))
             .option(Option.<Boolean>createBuilder()
@@ -74,7 +74,7 @@ public class YACLConfig extends SynchronoConfig {
                     .build())
             .build();
 
-    private static ConfigCategory debug_category = ConfigCategory.createBuilder()
+    private static final ConfigCategory debug_category = ConfigCategory.createBuilder()
             .name(Text.translatable("synchrono.config.debug.title"))
             .tooltip(Text.translatable("synchrono.config.debug.tooltip"))
             .group(OptionGroup.createBuilder()
