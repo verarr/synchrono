@@ -55,7 +55,7 @@ public class YACLConfig extends NewSynchronoConfig {
             .option(Option.<Boolean>createBuilder()
                     .name(Text.literal("Enabled"))
                     .description(OptionDescription.of(Text.literal("Enable setting in-game time")))
-                    .binding(true, () -> set_time, newVal -> set_time = newVal)
+                    .binding(true, () -> gametime_enabled, newVal -> gametime_enabled = newVal)
                     .controller(TickBoxControllerBuilder::create)
                     .build())
             .group(OptionGroup.createBuilder()
