@@ -1,9 +1,8 @@
 package xyz.verarr.synchrono.config.client;
 
 import dev.isxander.yacl3.api.*;
-import dev.isxander.yacl3.api.controller.DoubleFieldControllerBuilder;
-import dev.isxander.yacl3.api.controller.IntegerFieldControllerBuilder;
-import dev.isxander.yacl3.api.controller.TickBoxControllerBuilder;
+import dev.isxander.yacl3.api.controller.*;
+import dev.isxander.yacl3.gui.controllers.TickBoxController;
 import dev.isxander.yacl3.impl.controller.StringControllerBuilderImpl;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
@@ -76,10 +75,54 @@ public class YACLConfig extends NewSynchronoConfig {
                     .build())
             .build();
 
+    private static ConfigCategory debug_category = ConfigCategory.createBuilder()
+            .name(Text.literal("Debug"))
+            .tooltip(Text.literal("Options meant for debugging or advanced usage"))
+            .group(OptionGroup.createBuilder()
+                    .name(Text.literal("Toggles"))
+                    .description(OptionDescription.of(Text.literal("Toggle different aspects of the mod")))
+                    .option(Option.<Boolean>createBuilder()
+                            .name(Text.literal("Set time"))
+                            .description(OptionDescription.of(Text.literal("Set game time in absolute ticks")))
+                            .binding(true, () -> set_time, newVal -> set_time = newVal)
+                            .controller(TickBoxControllerBuilder::create)
+                            .build())
+                    .option(Option.<Boolean>createBuilder()
+                            .name(Text.literal("Brute-force set time"))
+                            .description(OptionDescription.of(Text.literal("Set game time every single server tick. Rough and may be buggy.")))
+                            .binding(false, () -> brute_force, newVal -> brute_force = newVal)
+                            .controller(TickBoxControllerBuilder::create)
+                            .build())
+                    .option(Option.<Boolean>createBuilder()
+                            .name(Text.literal("Set rate"))
+                            .description(OptionDescription.of(Text.literal("Set the rate at which time advances. Uses Custom Time Cycle.")))
+                            .binding(true, () -> set_rate, newVal -> set_rate = newVal)
+                            .controller(TickBoxControllerBuilder::create)
+                            .build())
+                    .build())
+            .group(OptionGroup.createBuilder()
+                    .name(Text.literal("API result properties"))
+                    .description(OptionDescription.of(Text.literal("Specify which results to retrieve from the API (sunrise = 0t, sunset = 12000t")))
+                    .option(Option.<String>createBuilder()
+                            .name(Text.literal("Sunrise"))
+                            .description(OptionDescription.of(Text.literal("The property to look up for the time of sunrise")))
+                            .binding("sunrise", () -> sunrise_property, newVal -> sunrise_property = newVal)
+                            .controller(StringControllerBuilder::create)
+                            .build())
+                    .option(Option.<String>createBuilder()
+                            .name(Text.literal("Sunset"))
+                            .description(OptionDescription.of(Text.literal("The property to look up for the time of sunset")))
+                            .binding("sunset", () -> sunset_property, newVal -> sunset_property = newVal)
+                            .controller(StringControllerBuilder::create)
+                            .build())
+                    .build())
+            .build();
+
     static YetAnotherConfigLib.Builder builder = YetAnotherConfigLib.createBuilder()
             .title(Text.literal("Used for narration. Could be used to render a title in the future."))
             .category(time_category)
             .category(gametime_category)
+            .category(debug_category)
             .save(HANDLER::save);
 
     static Screen getScreen(Screen parentScreen) {
