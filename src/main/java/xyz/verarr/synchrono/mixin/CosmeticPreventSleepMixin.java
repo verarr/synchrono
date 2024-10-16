@@ -11,13 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import xyz.verarr.synchrono.config.SynchronoConfig;
 
 @Mixin(ServerWorld.class)
-public class PreventSleepMixin {
-    @ModifyExpressionValue(method = "tick(Ljava/util/function/BooleanSupplier;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/SleepManager;canSkipNight(I)Z"))
-    public boolean preventSleeping(boolean original) {
-        return SynchronoConfig.prevent_sleep ? false : original;
-    }
-
+public class CosmeticPreventSleepMixin {
     /**
      * @author verarr
      * @reason cosmetic messages relating to sleep
