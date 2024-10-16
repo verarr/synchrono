@@ -30,6 +30,16 @@ Change the two values to your coordinates. Make sure you leave the commas on the
 
 See the [wiki](https://github.com/verarr/synchrono/wiki/Configuration)
 
+## Dependencies
+
+[Custom Time Cycle](https://modrinth.com/mod/customtimecycle) by [eclipseisoffline](https://github.com/eclipseisoffline) is used to make the in-game daylight cycle slow down smoothly.
+
+[YetAnotherConfigLib](https://modrinth.com/mod/yacl) is used for its configuration API and GUI.
+
+## Recommendations for other mods
+
+[Adjusted Phantom Spawns](https://modrinth.com/mod/adjusted-phantom-spawns) let's you change how often phantoms spawn. (useful if the in-game days are longer than usual)
+
 ## External API usage
 
 This mod periodically queries some APIs on the internet to retrieve necessary data to function.
