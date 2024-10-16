@@ -11,6 +11,7 @@ import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -23,7 +24,7 @@ public class SunriseSunsetAPI {
         URI uri;
         try {
             Formatter formatter = new Formatter(Locale.ROOT);
-            uri = new URI(API_URL + formatter.format("?lat=%f&lng=%f&timezone=%s&time_format=24", latitude, longitude, timezone));
+            uri = new URI(API_URL + formatter.format("?date=%s&lat=%f&lng=%f&timezone=%s&time_format=24", date.format(DateTimeFormatter.ISO_LOCAL_DATE), latitude, longitude, timezone));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
