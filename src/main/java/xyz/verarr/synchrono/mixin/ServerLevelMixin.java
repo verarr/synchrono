@@ -26,7 +26,7 @@ import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ServerWorld.class)
-public abstract class ServerLevelMixin {
+public class ServerLevelMixin {
     @Shadow @Final private ServerWorldProperties worldProperties;
     @Unique private IRLTimeManager irlTimeManager;
 
