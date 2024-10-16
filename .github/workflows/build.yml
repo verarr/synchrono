@@ -28,6 +28,9 @@ jobs:
       - name: make gradle wrapper executable
         run: chmod +x ./gradlew
       - name: build
+        env:
+          USERNAME: ${{ github.actor }}
+          TOKEN: ${{ github.token }}
         run: ./gradlew build
       - name: capture build artifacts
         if: ${{ matrix.java == '21' }} # Only upload artifacts built from latest java
