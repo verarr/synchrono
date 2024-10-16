@@ -30,6 +30,15 @@ Change the two values to your coordinates. Make sure you leave the commas on the
 
 See the [wiki](https://github.com/verarr/synchrono/wiki/Configuration)
 
+## External API usage
+
+This mod periodically queries some APIs on the internet to retrieve necessary data to function.
+
+* [SunriseSunset.io](https://sunrisesunset.io/) - needed for accurate localized sunrise and sunset timestamps.
+* [GeoTimeZone.com](https://geotimezone.com) - needed for automatically computing the time zone of a location.
+
+If your server doesn't have access to these, it might crash with the mod installed.
+
 ## License
 
 This mod is licensed under GNU LGPLv3.
