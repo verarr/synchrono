@@ -26,6 +26,10 @@ The configuration file (needed eg. when on a server) is located at `<server dire
 
 Change the two values to your coordinates. Make sure you leave the commas on the end of the lines.
 
+### Other configuration options
+
+See the [wiki](https://github.com/verarr/synchrono/wiki/Configuration)
+
 ## License
 
 This mod is licensed under GNU LGPLv3.
