@@ -25,7 +25,7 @@ public class IRLTimeManager extends PersistentState {
     private Map<LocalDate, SunriseSunsetData> sunriseSunsetDataCache = new HashMap<>();
 
     public IRLTimeManager() {
-        this.timezone = ZoneId.of(SynchronoConfig.timezone);
+        this.timezone = SynchronoConfig.timezone();
         this.firstStartDate = LocalDate.now(this.timezone);
     }
 
