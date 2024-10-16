@@ -59,6 +59,16 @@ public class IRLTimeManager extends PersistentState {
         sunriseSunsetDataCache.put(tomorrow, tomorrow_data);
     }
 
+    private void cacheMaintenance() {
+        sunriseSunsetDataCache.keySet().removeIf(key -> key.isBefore(LocalDate.now().minusDays(1)));
+    }
+
+    private SunriseSunsetData cachedQuery(LocalDate localDate) {
+        cacheMaintenance();
+        return sunriseSunsetDataCache.computeIfAbsent(localDate,
+                (day) -> SunriseSunsetAPI.query(day, SynchronoConfig.latitude, SynchronoConfig.longitude, SynchronoConfig.timezone()));
+    }
+
     public long tickAt(LocalDateTime dateTime) {
         long ticks;
 
