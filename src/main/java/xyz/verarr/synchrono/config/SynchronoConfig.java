@@ -19,7 +19,6 @@ public class SynchronoConfig {
 
     @SerialEntry public static double latitude = 51.11d;
     @SerialEntry public static double longitude = 17.022222d;
-    @SerialEntry public static String timezone = "UTC";
 
     @SerialEntry public static boolean invert = false;
     @SerialEntry public static boolean gametime_enabled = true;
