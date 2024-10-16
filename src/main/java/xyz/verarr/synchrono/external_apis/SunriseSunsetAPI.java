@@ -58,11 +58,11 @@ public class SunriseSunsetAPI {
         try {
             jsonObject = JsonParser.parseString(result.toString()).getAsJsonObject();
         } catch (JsonSyntaxException e) {
-            throw new RuntimeException(e + " URL: " + uri.toString() + " JSON: " + result.toString());
+            throw new RuntimeException(e + " URL: " + uri + " JSON: " + result);
         }
 
         if (!jsonObject.get("status").getAsString().equals("OK")) {
-            throw new RuntimeException("Not OK Json from API: " + jsonObject.toString());
+            throw new RuntimeException("Not OK Json from API: " + jsonObject);
         }
 
         JsonObject results = jsonObject.get("results").getAsJsonObject();
@@ -71,7 +71,7 @@ public class SunriseSunsetAPI {
             sunrise = LocalTime.parse(results.get(SynchronoConfig.sunrise_property).getAsString());
             sunset = LocalTime.parse(results.get(SynchronoConfig.sunset_property).getAsString());
         } catch (UnsupportedOperationException e) {
-            throw new RuntimeException(e + " JSON: " + result.toString());
+            throw new RuntimeException(e + " JSON: " + result);
         }
 
         data.sunrise = sunrise;
