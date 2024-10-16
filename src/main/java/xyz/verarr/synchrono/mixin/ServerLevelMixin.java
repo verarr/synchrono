@@ -5,7 +5,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.RandomSequencesState;
-import net.minecraft.world.PersistentStateManager;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.minecraft.world.level.storage.LevelStorage;
@@ -28,10 +27,6 @@ import java.util.function.BooleanSupplier;
 
 @Mixin(ServerWorld.class)
 public abstract class ServerLevelMixin {
-    @Shadow public abstract void setTimeOfDay(long timeOfDay);
-
-    @Shadow public abstract PersistentStateManager getPersistentStateManager();
-
     @Shadow @Final private ServerWorldProperties worldProperties;
     @Unique private IRLTimeManager irlTimeManager;
 
