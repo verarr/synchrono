@@ -37,7 +37,7 @@ public abstract class ServerLevelMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initializeIRLTimeManager(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
-        irlTimeManager = getPersistentStateManager().getOrCreate(IRLTimeManager.type, Synchrono.MOD_ID);
+        irlTimeManager = IRLTimeManager.getInstance((ServerWorld) (Object) this);
         irlTimeManager.markDirty();
     }
 
