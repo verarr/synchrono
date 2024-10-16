@@ -13,13 +13,14 @@ import java.net.ProtocolException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Formatter;
 import java.util.Locale;
 
 public class GeoTimeZoneAPI {
     private static final String API_URL = "https://api.geotimezone.com/public/timezone";
 
-    public static @NotNull ZoneId query(double latitude, double longitude) {
+    public static @NotNull ZoneOffset query(double latitude, double longitude) {
         URI uri;
         try {
             Formatter formatter = new Formatter(Locale.ROOT);
@@ -37,6 +38,6 @@ public class GeoTimeZoneAPI {
             throw new RuntimeException(e + " URL: " + uri.toString() + " JSON: " + result.toString());
         }
 
-        return ZoneId.of(jsonObject.get("timezone_abbreviation").getAsString());
+        return ZoneOffset.of(jsonObject.get("offset").getAsString().replaceFirst("UTC", "").replaceFirst(":.*", ""));
     }
 }

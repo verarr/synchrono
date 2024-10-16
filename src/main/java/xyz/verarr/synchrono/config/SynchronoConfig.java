@@ -9,6 +9,9 @@ import net.minecraft.util.Identifier;
 import xyz.verarr.synchrono.external_apis.GeoTimeZoneAPI;
 
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SynchronoConfig {
     public static ConfigClassHandler<SynchronoConfig> HANDLER = ConfigClassHandler.createBuilder(SynchronoConfig.class)
@@ -37,7 +40,20 @@ public class SynchronoConfig {
     @SerialEntry public static boolean set_rate = true;
     @SerialEntry public static boolean prevent_sleep = true;
 
+    private static class Coordinates {
+        public double latitude;
+        public double longitude;
+        public Coordinates(double lat, double lng) {
+            this.latitude = lat;
+            this.longitude = lng;
+        }
+    }
+    private static final Map<Coordinates, ZoneOffset> zoneOffsetCache = new HashMap<>(1);
+
     public static ZoneId timezone() {
-        return GeoTimeZoneAPI.query(latitude, longitude);
+        return ZoneId.ofOffset("UTC",
+                zoneOffsetCache.computeIfAbsent(
+                        new Coordinates(latitude, longitude),
+                        coordinates -> GeoTimeZoneAPI.query(coordinates.latitude, coordinates.longitude)));
     }
 }
