@@ -12,10 +12,6 @@ import xyz.verarr.synchrono.config.SynchronoConfig;
 
 @Mixin(ServerWorld.class)
 public class CosmeticPreventSleepMixin {
-    /**
-     * @author verarr
-     * @reason cosmetic messages relating to sleep
-     */
     @ModifyReturnValue(method = "isSleepingEnabled()Z", at = @At("RETURN"))
     public boolean isSleepingEnabled(boolean original) {
         return SynchronoConfig.prevent_sleep ? false : original;
