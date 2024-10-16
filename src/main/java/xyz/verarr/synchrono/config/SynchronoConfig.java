@@ -6,6 +6,12 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import com.google.gson.GsonBuilder;
 import net.minecraft.util.Identifier;
+import xyz.verarr.synchrono.external_apis.GeoTimeZoneAPI;
+
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SynchronoConfig {
     public static ConfigClassHandler<SynchronoConfig> HANDLER = ConfigClassHandler.createBuilder(SynchronoConfig.class)
@@ -19,7 +25,6 @@ public class SynchronoConfig {
 
     @SerialEntry public static double latitude = 51.11d;
     @SerialEntry public static double longitude = 17.022222d;
-    @SerialEntry public static String timezone = "UTC";
 
     @SerialEntry public static boolean invert = false;
     @SerialEntry public static boolean gametime_enabled = true;
@@ -34,4 +39,21 @@ public class SynchronoConfig {
     @SerialEntry public static boolean set_time = true;
     @SerialEntry public static boolean set_rate = true;
     @SerialEntry public static boolean prevent_sleep = true;
+
+    private static class Coordinates {
+        public double latitude;
+        public double longitude;
+        public Coordinates(double lat, double lng) {
+            this.latitude = lat;
+            this.longitude = lng;
+        }
+    }
+    private static final Map<Coordinates, ZoneOffset> zoneOffsetCache = new HashMap<>(1);
+
+    public static ZoneId timezone() {
+        return ZoneId.ofOffset("UTC",
+                zoneOffsetCache.computeIfAbsent(
+                        new Coordinates(latitude, longitude),
+                        coordinates -> GeoTimeZoneAPI.query(coordinates.latitude, coordinates.longitude)));
+    }
 }
