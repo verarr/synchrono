@@ -6,6 +6,9 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import com.google.gson.GsonBuilder;
 import net.minecraft.util.Identifier;
+import xyz.verarr.synchrono.external_apis.GeoTimeZoneAPI;
+
+import java.time.ZoneId;
 
 public class SynchronoConfig {
     public static ConfigClassHandler<SynchronoConfig> HANDLER = ConfigClassHandler.createBuilder(SynchronoConfig.class)
@@ -33,4 +36,8 @@ public class SynchronoConfig {
     @SerialEntry public static boolean set_time = true;
     @SerialEntry public static boolean set_rate = true;
     @SerialEntry public static boolean prevent_sleep = true;
+
+    public static ZoneId timezone() {
+        return GeoTimeZoneAPI.query(latitude, longitude);
+    }
 }
