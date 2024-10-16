@@ -48,16 +48,6 @@ public class IRLTimeManager extends PersistentState {
         return world.getPersistentStateManager().getOrCreate(IRLTimeManager.type, Synchrono.MOD_ID);
     }
 
-    public void cacheNextDay() {
-        LocalDate tomorrow = LocalDate.now(SynchronoConfig.timezone()).plusDays(1);
-        if (sunriseSunsetDataCache.containsKey(tomorrow)) return;
-
-        SunriseSunsetData tomorrow_data;
-        tomorrow_data = SunriseSunsetAPI.query(tomorrow, SynchronoConfig.latitude, SynchronoConfig.longitude, SynchronoConfig.timezone());
-
-        sunriseSunsetDataCache.put(tomorrow, tomorrow_data);
-    }
-
     private void cacheMaintenance() {
         sunriseSunsetDataCache.keySet().removeIf(key -> key.isBefore(LocalDate.now().minusDays(1)));
     }
