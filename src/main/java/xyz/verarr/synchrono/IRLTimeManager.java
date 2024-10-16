@@ -2,6 +2,7 @@ package xyz.verarr.synchrono;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 import xyz.verarr.synchrono.config.SynchronoConfig;
 
@@ -46,6 +47,9 @@ public class IRLTimeManager extends PersistentState {
             null
     );
 
+    public static IRLTimeManager getInstance(ServerWorld world) {
+        return world.getPersistentStateManager().getOrCreate(IRLTimeManager.type, Synchrono.MOD_ID);
+    }
 
     public void cacheNextDay() {
         LocalDate tomorrow = LocalDate.now(timezone).plusDays(1);
