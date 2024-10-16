@@ -3,8 +3,10 @@
 	"package": "xyz.verarr.synchrono.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
+		"CosmeticPreventSleepMixin",
 		"ExampleMixin",
-		"ServerLevelMixin"
+		"ServerLevelMixin",
+		"SleepManagerPreventSleepMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

@@ -33,4 +33,5 @@ public class SynchronoConfig {
 
     @SerialEntry public static boolean set_time = true;
     @SerialEntry public static boolean set_rate = true;
+    @SerialEntry public static boolean prevent_sleep = true;
 }
