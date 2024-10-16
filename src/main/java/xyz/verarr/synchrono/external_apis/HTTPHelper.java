@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URI;
-import java.net.URL;
 
 public class HTTPHelper {
     public static String get(URI uri) {

@@ -29,7 +29,7 @@ public class GeoTimeZoneAPI {
         try {
             jsonObject = JsonParser.parseString(result).getAsJsonObject();
         } catch (JsonSyntaxException e) {
-            throw new RuntimeException(e + " URL: " + uri.toString() + " JSON: " + result.toString());
+            throw new RuntimeException(e + " URL: " + uri + " JSON: " + result);
         }
 
         return ZoneOffset.of(jsonObject.get("offset").getAsString().replaceFirst("UTC", "").replaceFirst(":.*", ""));
