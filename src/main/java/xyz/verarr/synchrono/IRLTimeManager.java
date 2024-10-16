@@ -21,12 +21,10 @@ public class IRLTimeManager extends PersistentState {
     private static final int SERVER_TICKS_PER_SECOND = 20;
 
     public LocalDate firstStartDate;
-    public ZoneId timezone;
     private Map<LocalDate, SunriseSunsetData> sunriseSunsetDataCache = new HashMap<>();
 
     public IRLTimeManager() {
-        this.timezone = SynchronoConfig.timezone();
-        this.firstStartDate = LocalDate.now(this.timezone);
+        this.firstStartDate = LocalDate.now(SynchronoConfig.timezone());
     }
 
     @Override
@@ -52,11 +50,11 @@ public class IRLTimeManager extends PersistentState {
     }
 
     public void cacheNextDay() {
-        LocalDate tomorrow = LocalDate.now(timezone).plusDays(1);
+        LocalDate tomorrow = LocalDate.now(SynchronoConfig.timezone()).plusDays(1);
         if (sunriseSunsetDataCache.containsKey(tomorrow)) return;
 
         SunriseSunsetData tomorrow_data;
-        tomorrow_data = SunriseSunsetAPI.query(tomorrow, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
+        tomorrow_data = SunriseSunsetAPI.query(tomorrow, SynchronoConfig.latitude, SynchronoConfig.longitude, SynchronoConfig.timezone());
 
         sunriseSunsetDataCache.put(tomorrow, tomorrow_data);
     }
@@ -72,7 +70,7 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.query(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
+        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.query(day, SynchronoConfig.latitude, SynchronoConfig.longitude, SynchronoConfig.timezone());
         yesterday_data = sunriseSunsetDataCache.computeIfAbsent(yesterday, queryAPIFunction);
         today_data = sunriseSunsetDataCache.computeIfAbsent(today, queryAPIFunction);
         tomorrow_data = sunriseSunsetDataCache.computeIfAbsent(tomorrow, queryAPIFunction);
@@ -133,7 +131,7 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.query(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
+        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.query(day, SynchronoConfig.latitude, SynchronoConfig.longitude, SynchronoConfig.timezone());
         yesterday_data = sunriseSunsetDataCache.computeIfAbsent(yesterday, queryAPIFunction);
         today_data = sunriseSunsetDataCache.computeIfAbsent(today, queryAPIFunction);
         tomorrow_data = sunriseSunsetDataCache.computeIfAbsent(tomorrow, queryAPIFunction);
@@ -157,7 +155,7 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.query(day, SynchronoConfig.latitude, SynchronoConfig.longitude, timezone);
+        Function<LocalDate, SunriseSunsetData> queryAPIFunction = (day) -> SunriseSunsetAPI.query(day, SynchronoConfig.latitude, SynchronoConfig.longitude, SynchronoConfig.timezone());
         yesterday_data = sunriseSunsetDataCache.computeIfAbsent(yesterday, queryAPIFunction);
         today_data = sunriseSunsetDataCache.computeIfAbsent(today, queryAPIFunction);
         tomorrow_data = sunriseSunsetDataCache.computeIfAbsent(tomorrow, queryAPIFunction);
