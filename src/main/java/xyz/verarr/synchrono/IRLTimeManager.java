@@ -21,7 +21,7 @@ public class IRLTimeManager extends PersistentState {
     private static final int SERVER_TICKS_PER_SECOND = 20;
 
     public LocalDate firstStartDate;
-    private Map<LocalDate, SunriseSunsetData> sunriseSunsetDataCache = new HashMap<>();
+    private final Map<LocalDate, SunriseSunsetData> sunriseSunsetDataCache = new HashMap<>();
 
     public IRLTimeManager() {
         this.firstStartDate = LocalDate.now(SynchronoConfig.timezone());
