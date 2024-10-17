@@ -41,6 +41,7 @@ public class SynchronoConfig {
     @SerialEntry public static boolean setTime = true;
     @SerialEntry public static boolean setRate = true;
     @SerialEntry public static boolean preventSleep = true;
+    @SerialEntry public static boolean removeCommands = true;
 
     private static class Coordinates {
         public double latitude;
