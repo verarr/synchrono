@@ -97,6 +97,8 @@ public class IRLTimeManager extends PersistentState {
         ticks = Math.round(ticks * SynchronoConfig.scalar);
         ticks += SynchronoConfig.offset_ticks;
 
+        if (ticks < 0) ticks = (ticks % TICKS_PER_DAY + TICKS_PER_DAY) % TICKS_PER_DAY;
+
         return ticks;
     }
 
