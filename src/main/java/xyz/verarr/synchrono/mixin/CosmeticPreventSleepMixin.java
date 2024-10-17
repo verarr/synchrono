@@ -10,6 +10,6 @@ import xyz.verarr.synchrono.config.SynchronoConfig;
 public class CosmeticPreventSleepMixin {
     @ModifyReturnValue(method = "isSleepingEnabled()Z", at = @At("RETURN"))
     public boolean isSleepingEnabled(boolean original) {
-        return SynchronoConfig.prevent_sleep && SynchronoConfig.gametime_enabled ? false : original;
+        return SynchronoConfig.preventSleep && SynchronoConfig.gametimeEnabled ? false : original;
     }
 }
