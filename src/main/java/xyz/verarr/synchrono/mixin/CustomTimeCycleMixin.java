@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.event.Event;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import xyz.eclipseisoffline.customtimecycle.CustomTimeCycle;
+import xyz.verarr.synchrono.Synchrono;
+import xyz.verarr.synchrono.config.SynchronoConfig;
 
 @Mixin(CustomTimeCycle.class)
 public class CustomTimeCycleMixin {
@@ -15,6 +17,17 @@ public class CustomTimeCycleMixin {
             remap = false
     )
     private boolean doNotRegister(Event<CommandRegistrationCallback> instance, Object object) {
-        return !(object instanceof CommandRegistrationCallback);
+        if (!SynchronoConfig.removeCommands) {
+            Synchrono.LOGGER.info("Not removing commands");
+            return true;
+        }
+
+        if (!(object instanceof CommandRegistrationCallback)) {
+            Synchrono.LOGGER.warn("Not a CommandRegistrationCallback ({})", object);
+            return true;
+        }
+
+        Synchrono.LOGGER.info("Removing command {}", object);
+        return false;
     }
 }
