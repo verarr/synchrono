@@ -40,19 +40,19 @@ public class ServerLevelMixin {
 
     @Unique
     public void updateTime() {
-        if (!SynchronoConfig.gametime_enabled) return;
+        if (!SynchronoConfig.gametimeEnabled) return;
 
         TimeManager timeManager = TimeManager.getInstance((ServerWorld) (Object) this);
         LocalDateTime now = LocalDateTime.now(SynchronoConfig.timezone());
         int daytime = irlTimeManager.daytimeTicksAt(now);
         int nighttime = irlTimeManager.nighttimeTicksAt(now);
-        if (SynchronoConfig.set_rate) {
+        if (SynchronoConfig.setRate) {
             Synchrono.LOGGER.info("Setting time rate: {} {}", daytime, nighttime);
             timeManager.setTimeRate(daytime, nighttime);
         }
 
         long ticks = irlTimeManager.tickAt(LocalDateTime.now(SynchronoConfig.timezone()));
-        if (SynchronoConfig.set_time) {
+        if (SynchronoConfig.setTime) {
             Synchrono.LOGGER.info("Time is: {}", ticks);
             this.worldProperties.setTimeOfDay(ticks);
         }
@@ -67,7 +67,7 @@ public class ServerLevelMixin {
     public void periodicallyUpdateTime(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if (
                 (worldProperties.getTime() % 12000 == 0) ||
-                        SynchronoConfig.brute_force
+                        SynchronoConfig.bruteForce
         ) {
             updateTime();
         }

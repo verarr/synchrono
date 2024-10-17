@@ -95,7 +95,7 @@ public class IRLTimeManager extends PersistentState {
 
         if (SynchronoConfig.invert) ticks += TICKS_PER_HALF_DAY;
         ticks = Math.round(ticks * SynchronoConfig.scalar);
-        ticks += SynchronoConfig.offset_ticks;
+        ticks += SynchronoConfig.offsetTicks;
 
         if (ticks < 0) ticks = (ticks % TICKS_PER_DAY + TICKS_PER_DAY) % TICKS_PER_DAY;
 
@@ -103,25 +103,25 @@ public class IRLTimeManager extends PersistentState {
     }
 
     public int daytimeTicksAt(LocalDateTime dateTime) {
-        int daytime_ticks;
+        int daytimeTicks;
 
-        if (!SynchronoConfig.invert) daytime_ticks = hardDaytimeTicksAt(dateTime);
-        else daytime_ticks = hardNighttimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
+        if (!SynchronoConfig.invert) daytimeTicks = hardDaytimeTicksAt(dateTime);
+        else daytimeTicks = hardNighttimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
 
-        daytime_ticks = (int) Math.round(daytime_ticks / SynchronoConfig.scalar);
+        daytimeTicks = (int) Math.round(daytimeTicks / SynchronoConfig.scalar);
 
-        return daytime_ticks;
+        return daytimeTicks;
     }
 
     public int nighttimeTicksAt(LocalDateTime dateTime) {
-        int nighttime_ticks;
+        int nighttimeTicks;
 
-        if (!SynchronoConfig.invert) nighttime_ticks = hardNighttimeTicksAt(dateTime);
-        else nighttime_ticks = hardDaytimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
+        if (!SynchronoConfig.invert) nighttimeTicks = hardNighttimeTicksAt(dateTime);
+        else nighttimeTicks = hardDaytimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
 
-        nighttime_ticks = (int) Math.round(nighttime_ticks / SynchronoConfig.scalar);
+        nighttimeTicks = (int) Math.round(nighttimeTicks / SynchronoConfig.scalar);
 
-        return nighttime_ticks;
+        return nighttimeTicks;
     }
 
     private int hardDaytimeTicksAt(LocalDateTime dateTime) {
@@ -130,20 +130,20 @@ public class IRLTimeManager extends PersistentState {
         today = dateTime.toLocalDate();
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
-        SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        yesterday_data = cachedQuery(yesterday);
-        today_data = cachedQuery(today);
-        tomorrow_data = cachedQuery(tomorrow);
+        SunriseSunsetData yesterdayData, todayData, tomorrowData;
+        yesterdayData = cachedQuery(yesterday);
+        todayData = cachedQuery(today);
+        tomorrowData = cachedQuery(tomorrow);
 
-        if (dateTime.isBefore(today.atTime(today_data.sunrise))) {
+        if (dateTime.isBefore(today.atTime(todayData.sunrise))) {
             // update next daytime aka today
-            return (int) Duration.between(today.atTime(today_data.sunrise), today.atTime(today_data.sunset)).toSeconds() * SERVER_TICKS_PER_SECOND;
-        } else if (dateTime.isAfter(today.atTime(today_data.sunset))) {
+            return (int) Duration.between(today.atTime(todayData.sunrise), today.atTime(todayData.sunset)).toSeconds() * SERVER_TICKS_PER_SECOND;
+        } else if (dateTime.isAfter(today.atTime(todayData.sunset))) {
             // update next daytime aka tomorrow
-            return (int) Duration.between(tomorrow_data.sunrise, tomorrow_data.sunset).toSeconds() * SERVER_TICKS_PER_SECOND;
+            return (int) Duration.between(tomorrowData.sunrise, tomorrowData.sunset).toSeconds() * SERVER_TICKS_PER_SECOND;
         } else {
             // update current daytime
-            return (int) Duration.between(today_data.sunrise, today_data.sunset).toSeconds() * SERVER_TICKS_PER_SECOND;
+            return (int) Duration.between(todayData.sunrise, todayData.sunset).toSeconds() * SERVER_TICKS_PER_SECOND;
         }
     }
 
@@ -153,20 +153,20 @@ public class IRLTimeManager extends PersistentState {
         today = dateTime.toLocalDate();
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
-        SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        yesterday_data = cachedQuery(yesterday);
-        today_data = cachedQuery(today);
-        tomorrow_data = cachedQuery(tomorrow);
+        SunriseSunsetData yesterdayData, todayData, tomorrowData;
+        yesterdayData = cachedQuery(yesterday);
+        todayData = cachedQuery(today);
+        tomorrowData = cachedQuery(tomorrow);
 
-        if (dateTime.isBefore(today.atTime(today_data.sunrise))) {
+        if (dateTime.isBefore(today.atTime(todayData.sunrise))) {
             // update current nighttime aka yesterday and today
-            return (int) Duration.between(yesterday.atTime(yesterday_data.sunset), today.atTime(today_data.sunrise)).toSeconds() * SERVER_TICKS_PER_SECOND;
-        } else if (dateTime.isAfter(today.atTime(today_data.sunset))) {
+            return (int) Duration.between(yesterday.atTime(yesterdayData.sunset), today.atTime(todayData.sunrise)).toSeconds() * SERVER_TICKS_PER_SECOND;
+        } else if (dateTime.isAfter(today.atTime(todayData.sunset))) {
             // update current nighttime aka today and tomorrow
-            return (int) Duration.between(today.atTime(today_data.sunset), tomorrow.atTime(tomorrow_data.sunrise)).toSeconds() * SERVER_TICKS_PER_SECOND;
+            return (int) Duration.between(today.atTime(todayData.sunset), tomorrow.atTime(tomorrowData.sunrise)).toSeconds() * SERVER_TICKS_PER_SECOND;
         } else {
             // update next nighttime aka today and tomorrow
-            return (int) Duration.between(yesterday.atTime(today_data.sunset), today.atTime(tomorrow_data.sunrise)).toSeconds() * SERVER_TICKS_PER_SECOND;
+            return (int) Duration.between(yesterday.atTime(todayData.sunset), today.atTime(tomorrowData.sunrise)).toSeconds() * SERVER_TICKS_PER_SECOND;
         }
     }
 }

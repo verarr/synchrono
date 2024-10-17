@@ -45,8 +45,8 @@ public class SunriseSunsetAPI {
         JsonObject results = jsonObject.get("results").getAsJsonObject();
         LocalTime sunrise, sunset;
         try {
-            sunrise = LocalTime.parse(results.get(SynchronoConfig.sunrise_property).getAsString());
-            sunset = LocalTime.parse(results.get(SynchronoConfig.sunset_property).getAsString());
+            sunrise = LocalTime.parse(results.get(SynchronoConfig.sunriseProperty).getAsString());
+            sunset = LocalTime.parse(results.get(SynchronoConfig.sunsetProperty).getAsString());
         } catch (UnsupportedOperationException e) {
             throw new RuntimeException(e + " JSON: " + result);
         }
