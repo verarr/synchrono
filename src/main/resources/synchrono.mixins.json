@@ -1,13 +1,14 @@
 {
-	"required": true,
-	"package": "xyz.verarr.synchrono.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"CosmeticPreventSleepMixin",
-		"ServerLevelMixin",
-		"SleepManagerPreventSleepMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "xyz.verarr.synchrono.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "CosmeticPreventSleepMixin",
+    "CustomTimeCycleMixin",
+    "ServerLevelMixin",
+    "SleepManagerPreventSleepMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
