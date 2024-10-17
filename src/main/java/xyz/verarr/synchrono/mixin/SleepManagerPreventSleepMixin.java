@@ -10,6 +10,6 @@ import xyz.verarr.synchrono.config.SynchronoConfig;
 public class SleepManagerPreventSleepMixin {
     @ModifyReturnValue(method = "canSkipNight(I)Z", at = @At("RETURN"))
     public boolean preventSleep(boolean original) {
-        return SynchronoConfig.prevent_sleep ? false : original;
+        return SynchronoConfig.prevent_sleep && SynchronoConfig.gametime_enabled ? false : original;
     }
 }
