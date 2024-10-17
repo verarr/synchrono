@@ -36,6 +36,8 @@
   "synchrono.config.debug.toggles.set_rate.description": "Set the rate at which time advances. Uses Custom Time Cycle.",
   "synchrono.config.debug.toggles.prevent_sleep.name": "Prevent sleeping",
   "synchrono.config.debug.toggles.prevent_sleep.description": "Prevent players from skipping the night by sleeping",
+  "synchrono.config.debug.toggles.remove_commands.name": "Remove conflicting commands",
+  "synchrono.config.debug.toggles.remove_commands.description": "Remove some commands (currently, `/timecycle`) that interfere with this mod.",
   "synchrono.config.debug.api_properties.title": "API result properties",
   "synchrono.config.debug.api_properties.description": "Specify which results to retrieve from the API (sunrise = 0t, sunset = 12000t",
   "synchrono.config.debug.api_properties.sunrise.name": "Sunrise",
