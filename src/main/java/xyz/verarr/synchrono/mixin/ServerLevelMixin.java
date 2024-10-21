@@ -73,12 +73,21 @@ public class ServerLevelMixin {
 
     @Inject(method = "tick", at = @At("TAIL"))
     public void periodicallyUpdateTime(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
-        if (
-                (lastUpdateTime.isBefore(Instant.now().minus(30, ChronoUnit.MINUTES))) ||
-                (lastUpdateTimeTicks >= 2 * 20 * ChronoUnit.SECONDS.between(lastUpdateTime, Instant.now())) ||
-                        SynchronoConfig.bruteForce
-        ) {
-            updateTime();
-        }
+        String reason;
+
+        long minutesSinceLastUpdate = ChronoUnit.MINUTES.between(lastUpdateTime, Instant.now());
+        long serverTicksSinceLastUpdate = worldProperties.getTime() - lastUpdateTimeTicks;
+        long wallClockTicksSinceLastUpdate = (ChronoUnit.MILLIS.between(lastUpdateTime, Instant.now()) * 20) / 1000;
+
+        if (minutesSinceLastUpdate >= 30)
+            reason = "30 wall clock minutes have passed since last update";
+        else if (wallClockTicksSinceLastUpdate >= serverTicksSinceLastUpdate + 200)
+            reason = "Time out of sync (" + wallClockTicksSinceLastUpdate + " >= " + serverTicksSinceLastUpdate + " + 200)";
+        else if (SynchronoConfig.bruteForce)
+            reason = "Brute-force mode enabled";
+        else return;
+
+        updateTime();
+        Synchrono.LOGGER.info("Time update triggered because: {}", reason);
     }
 }
