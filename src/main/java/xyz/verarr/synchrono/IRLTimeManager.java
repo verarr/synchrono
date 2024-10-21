@@ -8,7 +8,6 @@ import xyz.verarr.synchrono.config.SynchronoConfig;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
 
 import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI;
 import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI.SunriseSunsetData;
@@ -20,7 +19,6 @@ public class IRLTimeManager extends PersistentState {
     private static final int SERVER_TICKS_PER_SECOND = 20;
 
     public LocalDate firstStartDate;
-    private final Map<LocalDate, SunriseSunsetData> sunriseSunsetDataCache = new HashMap<>();
 
     public IRLTimeManager() {
         this.firstStartDate = LocalDate.now(SynchronoConfig.timezone());
@@ -48,14 +46,8 @@ public class IRLTimeManager extends PersistentState {
         return world.getPersistentStateManager().getOrCreate(IRLTimeManager.type, Synchrono.MOD_ID);
     }
 
-    private void cacheMaintenance() {
-        sunriseSunsetDataCache.keySet().removeIf(key -> key.isBefore(LocalDate.now().minusDays(1)));
-    }
-
-    private SunriseSunsetData cachedQuery(LocalDate localDate) {
-        cacheMaintenance();
-        return sunriseSunsetDataCache.computeIfAbsent(localDate,
-                (day) -> SunriseSunsetAPI.query(day, SynchronoConfig.latitude, SynchronoConfig.longitude, SynchronoConfig.timezone()));
+    private SunriseSunsetData querySunriseSunsetAPI(LocalDate localDate) {
+        return SunriseSunsetAPI.query(localDate, SynchronoConfig.latitude, SynchronoConfig.longitude, SynchronoConfig.timezone());
     }
 
     public long tickAt(LocalDateTime dateTime) {
@@ -69,9 +61,9 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterday_data, today_data, tomorrow_data;
-        yesterday_data = cachedQuery(yesterday);
-        today_data = cachedQuery(today);
-        tomorrow_data = cachedQuery(tomorrow);
+        yesterday_data = querySunriseSunsetAPI(yesterday);
+        today_data = querySunriseSunsetAPI(today);
+        tomorrow_data = querySunriseSunsetAPI(tomorrow);
 
         if (dateTime.isBefore(dateTime.toLocalDate().atTime(today_data.sunrise))) {
             // before sunrise - use yesterday_data (and today_data)
@@ -131,9 +123,9 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterdayData, todayData, tomorrowData;
-        yesterdayData = cachedQuery(yesterday);
-        todayData = cachedQuery(today);
-        tomorrowData = cachedQuery(tomorrow);
+        yesterdayData = querySunriseSunsetAPI(yesterday);
+        todayData = querySunriseSunsetAPI(today);
+        tomorrowData = querySunriseSunsetAPI(tomorrow);
 
         if (dateTime.isBefore(today.atTime(todayData.sunrise))) {
             // update next daytime aka today
@@ -154,9 +146,9 @@ public class IRLTimeManager extends PersistentState {
         tomorrow = dateTime.plusDays(1).toLocalDate();
 
         SunriseSunsetData yesterdayData, todayData, tomorrowData;
-        yesterdayData = cachedQuery(yesterday);
-        todayData = cachedQuery(today);
-        tomorrowData = cachedQuery(tomorrow);
+        yesterdayData = querySunriseSunsetAPI(yesterday);
+        todayData = querySunriseSunsetAPI(today);
+        tomorrowData = querySunriseSunsetAPI(tomorrow);
 
         if (dateTime.isBefore(today.atTime(todayData.sunrise))) {
             // update current nighttime aka yesterday and today
