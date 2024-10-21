@@ -35,6 +35,7 @@ public class ServerLevelMixin {
     @Unique private IRLTimeManager irlTimeManager;
 
     @Unique private Instant lastUpdateTime;
+    @Unique private long lastUpdateTimeTicks;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initializeIRLTimeManager(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<SpecialSpawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
@@ -47,6 +48,7 @@ public class ServerLevelMixin {
         if (!SynchronoConfig.gametimeEnabled) return;
 
         lastUpdateTime = Instant.now();
+        lastUpdateTimeTicks = worldProperties.getTime();
 
         TimeManager timeManager = TimeManager.getInstance((ServerWorld) (Object) this);
         LocalDateTime now = LocalDateTime.now(SynchronoConfig.timezone());
@@ -73,6 +75,7 @@ public class ServerLevelMixin {
     public void periodicallyUpdateTime(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if (
                 (lastUpdateTime.isBefore(Instant.now().minus(30, ChronoUnit.MINUTES))) ||
+                (lastUpdateTimeTicks >= 2 * 20 * ChronoUnit.SECONDS.between(lastUpdateTime, Instant.now())) ||
                         SynchronoConfig.bruteForce
         ) {
             updateTime();
