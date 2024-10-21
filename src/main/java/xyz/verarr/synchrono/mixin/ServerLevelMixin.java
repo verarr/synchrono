@@ -71,8 +71,8 @@ public class ServerLevelMixin {
         updateTime();
     }
 
-    @Inject(method = "tick", at = @At("TAIL"))
-    public void periodicallyUpdateTime(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
+    @Inject(method = "tickTime", at = @At("TAIL"))
+    public void periodicallyUpdateTime(CallbackInfo ci) {
         String reason;
 
         long minutesSinceLastUpdate = ChronoUnit.MINUTES.between(lastUpdateTime, Instant.now());
