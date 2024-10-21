@@ -13,6 +13,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class SynchronoConfig {
     public static ConfigClassHandler<SynchronoConfig> HANDLER = ConfigClassHandler.createBuilder(SynchronoConfig.class)
@@ -49,6 +50,20 @@ public class SynchronoConfig {
         public Coordinates(double lat, double lng) {
             this.latitude = lat;
             this.longitude = lng;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Coordinates that = (Coordinates) o;
+            return Double.compare(that.latitude, latitude) == 0 &&
+                    Double.compare(that.longitude, longitude) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(latitude, longitude);
         }
     }
     private static final Map<Coordinates, ZoneOffset> zoneOffsetCache = new HashMap<>(1);
