@@ -22,7 +22,9 @@ import xyz.verarr.synchrono.IRLTimeManager;
 import xyz.verarr.synchrono.Synchrono;
 import xyz.verarr.synchrono.config.SynchronoConfig;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
@@ -31,6 +33,8 @@ import java.util.function.BooleanSupplier;
 public class ServerLevelMixin {
     @Shadow @Final private ServerWorldProperties worldProperties;
     @Unique private IRLTimeManager irlTimeManager;
+
+    @Unique private Instant lastUpdateTime;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initializeIRLTimeManager(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<SpecialSpawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
@@ -41,6 +45,8 @@ public class ServerLevelMixin {
     @Unique
     public void updateTime() {
         if (!SynchronoConfig.gametimeEnabled) return;
+
+        lastUpdateTime = Instant.now();
 
         TimeManager timeManager = TimeManager.getInstance((ServerWorld) (Object) this);
         LocalDateTime now = LocalDateTime.now(SynchronoConfig.timezone());
@@ -66,7 +72,7 @@ public class ServerLevelMixin {
     @Inject(method = "tick", at = @At("TAIL"))
     public void periodicallyUpdateTime(BooleanSupplier shouldKeepTicking, CallbackInfo ci) {
         if (
-                (worldProperties.getTime() % 12000 == 0) ||
+                (lastUpdateTime.isBefore(Instant.now().minus(30, ChronoUnit.MINUTES))) ||
                         SynchronoConfig.bruteForce
         ) {
             updateTime();
