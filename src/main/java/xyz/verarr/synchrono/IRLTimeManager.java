@@ -1,7 +1,6 @@
 package xyz.verarr.synchrono;
 
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 import xyz.verarr.synchrono.config.SynchronoConfig;
@@ -25,25 +24,19 @@ public class IRLTimeManager extends PersistentState {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+    public NbtCompound writeNbt(NbtCompound nbt) {
         nbt.putLong(FIRST_START_DATE_NBT_TAG, firstStartDate.toEpochDay());
         return nbt;
     }
 
-    public static IRLTimeManager createFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
+    public static IRLTimeManager createFromNbt(NbtCompound tag) {
         IRLTimeManager irlTimeManager = new IRLTimeManager();
         irlTimeManager.firstStartDate = LocalDate.ofEpochDay(tag.getLong(FIRST_START_DATE_NBT_TAG));
         return irlTimeManager;
     }
 
-    public static Type<IRLTimeManager> type = new Type<>(
-            IRLTimeManager::new,
-            IRLTimeManager::createFromNbt,
-            null
-    );
-
     public static IRLTimeManager getInstance(ServerWorld world) {
-        return world.getPersistentStateManager().getOrCreate(IRLTimeManager.type, Synchrono.MOD_ID);
+        return world.getPersistentStateManager().getOrCreate(IRLTimeManager::createFromNbt, IRLTimeManager::new, Synchrono.MOD_ID);
     }
 
     private SunriseSunsetData querySunriseSunsetAPI(LocalDate localDate) {

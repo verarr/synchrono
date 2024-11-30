@@ -19,7 +19,7 @@ repositories {
 
 	maven {
 		name = "GitHubPackages"
-		url = uri("https://maven.pkg.github.com/eclipseisoffline/customtimecycle")
+		url = uri("https://maven.pkg.github.com/verarr/customtimecycle")
 		credentials {
 			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
 			password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
@@ -62,7 +62,9 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	modImplementation "xyz.eclipseisoffline:customtimecycle:${project.customtimecycle_version}"
+	modImplementation "xyz.verarr.etc." +
+			"xyz.eclipseisoffline:customtimecycle:${project.
+			customtimecycle_version}"
 	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
 }
@@ -76,7 +78,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 17
 }
 
 java {
@@ -85,8 +87,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {

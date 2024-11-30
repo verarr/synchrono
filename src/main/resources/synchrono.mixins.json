@@ -1,7 +1,7 @@
 {
   "required": true,
   "package": "xyz.verarr.synchrono.mixin",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_17",
   "mixins": [
     "CosmeticPreventSleepMixin",
     "CustomTimeCycleMixin",
