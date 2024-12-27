@@ -67,6 +67,23 @@ public class YACLConfig extends SynchronoConfig {
                     .build())
             .build();
 
+    private static final ConfigCategory weather_category = ConfigCategory.createBuilder()
+            .name(Text.translatable("synchrono.config.weather.title"))
+            .tooltip(Text.translatable("synchrono.config.weather.tooltip"))
+            .option(Option.<Boolean>createBuilder()
+                    .name(Text.translatable("synchrono.config.weather.enabled.name"))
+                    .description(OptionDescription.of(Text.translatable("synchrono.config.weather.enabled.description")))
+                    .binding(true, () -> weatherEnabled,newVal -> weatherEnabled = newVal)
+                    .controller(BooleanControllerBuilder::create)
+                    .build())
+            .option(Option.<WeatherModel>createBuilder()
+                    .name(Text.translatable("synchrono.config.weather.model.name"))
+                    .description(OptionDescription.of(Text.translatable("synchrono.config.weather.enabled.description")))
+                    .binding(WeatherModel.VANILLA, () -> weatherModel, newVal -> weatherModel = newVal)
+                    .controller(opt -> EnumControllerBuilder.create(opt).enumClass(WeatherModel.class))
+                    .build())
+            .build();
+
     private static final ConfigCategory debug_category = ConfigCategory.createBuilder()
             .name(Text.translatable("synchrono.config.debug.title"))
             .tooltip(Text.translatable("synchrono.config.debug.tooltip"))
@@ -126,6 +143,7 @@ public class YACLConfig extends SynchronoConfig {
             .title(Text.translatable("synchrono.config.title"))
             .category(time_category)
             .category(gametime_category)
+            .category(weather_category)
             .category(debug_category)
             .save(HANDLER::save);
 

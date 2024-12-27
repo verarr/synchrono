@@ -1,11 +1,13 @@
 package xyz.verarr.synchrono.config;
 
 import com.google.gson.FieldNamingPolicy;
+import dev.isxander.yacl3.api.NameableEnum;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import com.google.gson.GsonBuilder;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import xyz.verarr.synchrono.external_apis.GeoTimeZoneAPI;
 
@@ -37,9 +39,16 @@ public class SynchronoConfig {
 
     @SerialEntry public static boolean weatherEnabled = true;
 
-    public enum WeatherModel {
-        VANILLA
+    public enum WeatherModel implements NameableEnum {
+        VANILLA;
         // TODO: more
+
+        @Override
+        public Text getDisplayName() {
+            return switch (this) {
+                case VANILLA -> Text.literal("Vanilla");
+            };
+        }
     }
 
     @SerialEntry public static WeatherModel weatherModel = WeatherModel.VANILLA;
