@@ -32,12 +32,10 @@ import java.util.concurrent.Executor;
 @Mixin(ServerWorld.class)
 public class ServerLevelWeatherMixin {
     @Shadow @Final private ServerWorldProperties worldProperties;
-    @Unique private Instant lastUpdateWeather;
+    @Unique private Instant lastUpdateWeather = Instant.MIN;
 
     @Unique
     public void updateWeather() {
-        if (!SynchronoConfig.weatherEnabled) return;
-
         lastUpdateWeather = Instant.now();
 
         OpenMeteoAPI.WeatherCode weatherCode = OpenMeteoAPI.queryCurrent(SynchronoConfig.latitude, SynchronoConfig.longitude);
@@ -53,11 +51,16 @@ public class ServerLevelWeatherMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void initialUpdateWeather(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<SpecialSpawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
-        updateWeather();
+        if (SynchronoConfig.weatherEnabled) updateWeather();
     }
 
     @Inject(method = "tickWeather", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
     public void periodicallyUpdateWeather(CallbackInfo ci) {
+        if (!SynchronoConfig.weatherEnabled) {
+            lastUpdateWeather = Instant.MIN;
+            return;
+        };
+
         String reason;
 
         long minutesSinceLastUpdate = ChronoUnit.MINUTES.between(lastUpdateWeather, Instant.now());
