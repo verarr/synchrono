@@ -35,6 +35,15 @@ public class SynchronoConfig {
     @SerialEntry public static double scalar = 1.0f;
     @SerialEntry public static int offsetTicks = 0;
 
+    @SerialEntry public static boolean weatherEnabled = true;
+
+    public enum WeatherModel {
+        VANILLA
+        // TODO: more
+    }
+
+    @SerialEntry public static WeatherModel weatherModel = WeatherModel.VANILLA;
+
     @SerialEntry public static boolean bruteForce = false;
     @SerialEntry public static String sunriseProperty = "sunrise";
     @SerialEntry public static String sunsetProperty = "sunset";

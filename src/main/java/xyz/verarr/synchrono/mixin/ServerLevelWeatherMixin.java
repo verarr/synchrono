@@ -21,6 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import xyz.verarr.synchrono.Synchrono;
 import xyz.verarr.synchrono.config.SynchronoConfig;
 import xyz.verarr.synchrono.external_apis.OpenMeteoAPI;
+import xyz.verarr.synchrono.weather_models.VanillaWeatherModel;
+import xyz.verarr.synchrono.weather_models.WeatherModel;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -34,23 +36,17 @@ public class ServerLevelWeatherMixin {
 
     @Unique
     public void updateWeather() {
-        // TODO: add config check
+        if (!SynchronoConfig.weatherEnabled) return;
 
         lastUpdateWeather = Instant.now();
 
         OpenMeteoAPI.WeatherCode weatherCode = OpenMeteoAPI.queryCurrent(SynchronoConfig.latitude, SynchronoConfig.longitude);
 
         // TODO: more weather models (with mods)
-        if (weatherCode.thunderstormStrength() > 0 || weatherCode.hailStrength() > 0) {
-            worldProperties.setRaining(true);  // unsure if this is necessary
-            worldProperties.setThundering(true);
-        } else if (weatherCode.rainStrength() > 0 || weatherCode.snowStrength() > 0 || weatherCode.sleetStrength() > 0) {
-            worldProperties.setRaining(true);
-            worldProperties.setThundering(false);
-        } else {
-            worldProperties.setRaining(false);
-            worldProperties.setThundering(false);
-        }
+        WeatherModel weatherModel = switch (SynchronoConfig.weatherModel) {
+            case VANILLA -> VanillaWeatherModel.getInstance();
+        };
+        weatherModel.apply(weatherCode, (ServerWorld) (Object) this);
 
         Synchrono.LOGGER.info("Weather code is: {}", weatherCode.getRawValue());
     }
@@ -76,7 +72,6 @@ public class ServerLevelWeatherMixin {
 
     @ModifyExpressionValue(method = "tickWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
     public boolean doDaylightCycle(boolean original) {
-        // TODO: ADD CONFIG CHECK !!
-        return false;
+        return SynchronoConfig.weatherEnabled ? false : original;
     }
 }
