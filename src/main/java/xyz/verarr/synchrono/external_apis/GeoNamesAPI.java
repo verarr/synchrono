@@ -11,7 +11,7 @@ import java.time.ZoneOffset;
 import java.util.Formatter;
 import java.util.Locale;
 
-public class GeoTimeZoneAPI {
+public class GeoNamesAPI {
     private static final String API_URL = "http://api.geonames.org/timezoneJSON";
 
     public static @NotNull ZoneOffset query(double latitude, double longitude) {

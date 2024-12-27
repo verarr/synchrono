@@ -7,7 +7,7 @@ import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import com.google.gson.GsonBuilder;
 import net.minecraft.util.Identifier;
-import xyz.verarr.synchrono.external_apis.GeoTimeZoneAPI;
+import xyz.verarr.synchrono.external_apis.GeoNamesAPI;
 
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -72,6 +72,6 @@ public class SynchronoConfig {
         return ZoneId.ofOffset("UTC",
                 zoneOffsetCache.computeIfAbsent(
                         new Coordinates(latitude, longitude),
-                        coordinates -> GeoTimeZoneAPI.query(coordinates.latitude, coordinates.longitude)));
+                        coordinates -> GeoNamesAPI.query(coordinates.latitude, coordinates.longitude)));
     }
 }
