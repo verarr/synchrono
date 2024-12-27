@@ -6,6 +6,7 @@
     "CosmeticPreventSleepMixin",
     "CustomTimeCycleMixin",
     "ServerLevelMixin",
+    "ServerLevelWeatherMixin",
     "SleepManagerPreventSleepMixin"
   ],
   "injectors": {
