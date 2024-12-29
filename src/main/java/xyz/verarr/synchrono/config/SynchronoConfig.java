@@ -1,11 +1,13 @@
 package xyz.verarr.synchrono.config;
 
 import com.google.gson.FieldNamingPolicy;
+import dev.isxander.yacl3.api.NameableEnum;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import com.google.gson.GsonBuilder;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import xyz.verarr.synchrono.external_apis.GeoNamesAPI;
 
@@ -34,6 +36,22 @@ public class SynchronoConfig {
 
     @SerialEntry public static double scalar = 1.0f;
     @SerialEntry public static int offsetTicks = 0;
+
+    @SerialEntry public static boolean weatherEnabled = true;
+
+    public enum WeatherModel implements NameableEnum {
+        VANILLA;
+        // TODO: more
+
+        @Override
+        public Text getDisplayName() {
+            return switch (this) {
+                case VANILLA -> Text.literal("Vanilla");
+            };
+        }
+    }
+
+    @SerialEntry public static WeatherModel weatherModel = WeatherModel.VANILLA;
 
     @SerialEntry public static boolean bruteForce = false;
     @SerialEntry public static String sunriseProperty = "sunrise";
