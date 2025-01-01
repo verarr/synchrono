@@ -30,7 +30,7 @@ import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
 
 @Mixin(ServerWorld.class)
-public class ServerLevelMixin {
+public class ServerLevelTimeMixin {
     @Shadow @Final private ServerWorldProperties worldProperties;
     @Unique private IRLTimeManager irlTimeManager;
 
