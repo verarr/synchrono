@@ -2,6 +2,7 @@ package xyz.verarr.synchrono.config.client;
 
 import dev.isxander.yacl3.api.*;
 import dev.isxander.yacl3.api.controller.*;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import xyz.verarr.synchrono.config.SynchronoConfig;
@@ -63,6 +64,17 @@ public class YACLConfig extends SynchronoConfig {
                             .description(OptionDescription.of(Text.translatable("synchrono.config.gametime.modifiers.offset_ticks.description")))
                             .binding(0, () -> offsetTicks, newVal -> offsetTicks = newVal)
                             .controller(IntegerFieldControllerBuilder::create)
+                            .build())
+                    .build())
+            .group(OptionGroup.createBuilder()
+                    .name(Text.translatable("synchrono.config.gametime.miscellaneous.title"))
+                    .description(OptionDescription.of(Text.translatable("synchrono.config.gametime.miscellaneous.description")))
+                    .option(Option.<Boolean>createBuilder()
+                            .name(Text.translatable("synchrono.config.gametime.miscellaneous.adjustedphantomspawns.name"))
+                            .description(OptionDescription.of(Text.translatable("synchrono.config.gametime.miscellaneous.adjustedphantomspawns.description")))
+                            .binding(true, () -> adjustedPhantomSpawnsIntegration, newVal -> adjustedPhantomSpawnsIntegration = newVal)
+                            .controller(TickBoxControllerBuilder::create)
+                            .available(FabricLoader.getInstance().isModLoaded("adjusted_phantom_spawns"))
                             .build())
                     .build())
             .build();
