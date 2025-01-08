@@ -27,6 +27,15 @@ repositories {
 	}
 
 	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/verarr/adjusted-phantom-spawns")
+		credentials {
+			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+			password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+		}
+	}
+
+	maven {
 		url = "https://api.modrinth.com/maven"
 	}
 
@@ -39,6 +48,8 @@ repositories {
 		name = "Terraformers"
 		url = "https://maven.terraformersmc.com/"
 	}
+
+	maven { url 'https://maven.architectury.dev/' }
 }
 
 loom {
@@ -65,6 +76,8 @@ dependencies {
 	modImplementation "xyz.eclipseisoffline:customtimecycle:${project.customtimecycle_version}"
 	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl_version}"
 	modImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+
+	modImplementation "xyz.verarr:adjusted_phantom_spawns-fabric:${project.adjusted_phantom_spawns_version}"
 }
 
 processResources {
