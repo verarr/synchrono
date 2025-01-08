@@ -34,6 +34,8 @@ public class SynchronoConfig {
     @SerialEntry public static boolean invert = false;
     @SerialEntry public static boolean gametimeEnabled = true;
 
+    @SerialEntry public static boolean adjustedPhantomSpawnsIntegration = true;
+
     @SerialEntry public static double scalar = 1.0f;
     @SerialEntry public static int offsetTicks = 0;
 
