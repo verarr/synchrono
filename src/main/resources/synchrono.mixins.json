@@ -7,8 +7,10 @@
     "CustomTimeCycleMixin",
     "ServerLevelTimeMixin",
     "ServerLevelWeatherMixin",
-    "SleepManagerPreventSleepMixin"
+    "SleepManagerPreventSleepMixin",
+    "integration.AdjustedPhantomSpawnsMixin"
   ],
+  "plugin": "xyz.verarr.synchrono.mixin.SynchronoMixinPlugin",
   "injectors": {
     "defaultRequire": 1
 	}
