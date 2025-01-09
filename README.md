@@ -2,7 +2,7 @@
 
 A mod for Minecraft that syncs the in-game daylight cycle to a location in real life.
 
-It uses data from [SunriseSunset.io](https://sunrisesunset.io) to get accurate timestamps for sunrise and sunset. The location of the server can be set in configuration files.
+It uses data from [SunriseSunset.io](https://sunrisesunset.io) to get accurate timestamps for sunrise and sunset, and [Open-Meteo.com](https://openmeteo.com) to get realtime weather updates. The location of the server can be set in configuration files.
 
 ## Usage
 
@@ -38,14 +38,15 @@ See the [wiki](https://github.com/verarr/synchrono/wiki/Configuration)
 
 ## Recommendations for other mods
 
-[Adjusted Phantom Spawns](https://modrinth.com/mod/adjusted-phantom-spawns) let's you change how often phantoms spawn. (useful if the in-game days are longer than usual)
+[Adjusted Phantom Spawns](https://modrinth.com/mod/adjusted-phantom-spawns) with both mods installed, automatically changes phantoms to only spawn after 3 real-life days have passed.
 
 ## External API usage
 
 This mod periodically queries some APIs on the internet to retrieve necessary data to function.
 
 * [SunriseSunset.io](https://sunrisesunset.io/) - needed for accurate localized sunrise and sunset timestamps.
-* [GeoTimeZone.com](https://geotimezone.com) - needed for automatically computing the time zone of a location.
+* [GeoNames.org](https://geonames.org) - needed for automatically computing the time zone of a location.
+* [Open-Meteo.com](https://open-meteo.com) - needed for realtime localized weather updates.
 
 If your server doesn't have access to these, it might crash with the mod installed.
 
