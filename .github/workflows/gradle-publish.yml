@@ -32,6 +32,9 @@ jobs:
     - name: make gradle wrapper executable
       run: chmod +x ./gradlew
     - name: build
+      env:
+        USERNAME: ${{ github.actor }}
+        TOKEN: ${{ github.token }}
       run: ./gradlew build
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
