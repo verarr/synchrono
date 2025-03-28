@@ -3,10 +3,12 @@ package xyz.verarr.synchrono;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
+import net.minecraft.world.PersistentStateType;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import xyz.verarr.synchrono.config.SynchronoConfig;
 import xyz.verarr.synchrono.external_apis.SunriseSunsetAPI;
@@ -22,24 +24,23 @@ public class IRLTimeManager extends PersistentState {
 
     public IRLTimeManager() { this.firstStartDate = LocalDate.now(SynchronoConfig.timezone()); }
 
-    @Override
-    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
-        nbt.putLong(FIRST_START_DATE_NBT_TAG, firstStartDate.toEpochDay());
-        return nbt;
+    public IRLTimeManager(long firstStartDate) {
+        this.firstStartDate = LocalDate.ofEpochDay(firstStartDate);
     }
 
-    public static IRLTimeManager createFromNbt(NbtCompound                   tag,
-                                               RegistryWrapper.WrapperLookup registryLookup) {
-        IRLTimeManager irlTimeManager = new IRLTimeManager();
-        irlTimeManager.firstStartDate = LocalDate.ofEpochDay(tag.getLong(FIRST_START_DATE_NBT_TAG));
-        return irlTimeManager;
-    }
+    private static PersistentStateType<IRLTimeManager> type(ServerWorld world) {
+        Codec<IRLTimeManager> codec = RecordCodecBuilder.create(
+            instance
+            -> instance
+                   .group(Codec.LONG.fieldOf(FIRST_START_DATE_NBT_TAG)
+                              .forGetter(manager -> manager.firstStartDate.toEpochDay()))
+                   .apply(instance, IRLTimeManager::new));
 
-    public static Type<IRLTimeManager> type =
-        new Type<>(IRLTimeManager::new, IRLTimeManager::createFromNbt, null);
+        return new PersistentStateType<>(Synchrono.MOD_ID, IRLTimeManager::new, codec, null);
+    }
 
     public static IRLTimeManager getInstance(ServerWorld world) {
-        return world.getPersistentStateManager().getOrCreate(IRLTimeManager.type, Synchrono.MOD_ID);
+        return world.getPersistentStateManager().getOrCreate(IRLTimeManager.type(world));
     }
 
     private SunriseSunsetData querySunriseSunsetAPI(LocalDate localDate) {
