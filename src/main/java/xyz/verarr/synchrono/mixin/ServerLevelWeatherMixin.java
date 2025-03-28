@@ -1,6 +1,10 @@
 package xyz.verarr.synchrono.mixin;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.concurrent.Executor;
+
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.WorldGenerationProgressListener;
@@ -11,6 +15,8 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.level.ServerWorldProperties;
 import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.spawner.SpecialSpawner;
+
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,21 +30,17 @@ import xyz.verarr.synchrono.external_apis.OpenMeteoAPI;
 import xyz.verarr.synchrono.weather_models.VanillaWeatherModel;
 import xyz.verarr.synchrono.weather_models.WeatherModel;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.concurrent.Executor;
-
 @Mixin(ServerWorld.class)
 public class ServerLevelWeatherMixin {
     @Shadow @Final private ServerWorldProperties worldProperties;
-    @Unique private Instant lastUpdateWeather = Instant.MIN;
+    @Unique private Instant                      lastUpdateWeather = Instant.MIN;
 
     @Unique
     public void updateWeather() {
         lastUpdateWeather = Instant.now();
 
-        OpenMeteoAPI.WeatherCode weatherCode = OpenMeteoAPI.queryCurrent(SynchronoConfig.latitude, SynchronoConfig.longitude);
+        OpenMeteoAPI.WeatherCode weatherCode =
+            OpenMeteoAPI.queryCurrent(SynchronoConfig.latitude, SynchronoConfig.longitude);
 
         // TODO: more weather models (with mods)
         WeatherModel weatherModel = switch (SynchronoConfig.weatherModel) {
@@ -50,12 +52,32 @@ public class ServerLevelWeatherMixin {
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void initialUpdateWeather(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> worldKey, DimensionOptions dimensionOptions, WorldGenerationProgressListener worldGenerationProgressListener, boolean debugWorld, long seed, List<SpecialSpawner> spawners, boolean shouldTickTime, RandomSequencesState randomSequencesState, CallbackInfo ci) {
+    public void
+    initialUpdateWeather(MinecraftServer                 server,
+                         Executor                        workerExecutor,
+                         LevelStorage.Session            session,
+                         ServerWorldProperties           properties,
+                         RegistryKey<World>              worldKey,
+                         DimensionOptions                dimensionOptions,
+                         WorldGenerationProgressListener worldGenerationProgressListener,
+                         boolean                         debugWorld,
+                         long                            seed,
+                         List<SpecialSpawner>            spawners,
+                         boolean                         shouldTickTime,
+                         RandomSequencesState            randomSequencesState,
+                         CallbackInfo                    ci) {
         if (SynchronoConfig.weatherEnabled) updateWeather();
     }
 
-    @Inject(method = "tickWeather", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
-    public void periodicallyUpdateWeather(CallbackInfo ci) {
+    @Inject(
+        method = "tickWeather",
+        at     = @At(
+            value = "INVOKE",
+            shift = At.Shift.AFTER,
+            target =
+                "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
+    public void
+    periodicallyUpdateWeather(CallbackInfo ci) {
         if (!SynchronoConfig.weatherEnabled) {
             lastUpdateWeather = Instant.MIN;
             return;
@@ -73,8 +95,14 @@ public class ServerLevelWeatherMixin {
         Synchrono.LOGGER.info("Weather update triggered because: {}", reason);
     }
 
-    @ModifyExpressionValue(method = "tickWeather", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
-    public boolean doDaylightCycle(boolean original) {
+    @ModifyExpressionValue(
+        method = "tickWeather",
+        at     = @At(
+            value = "INVOKE",
+            target =
+                "Lnet/minecraft/world/GameRules;getBoolean(Lnet/minecraft/world/GameRules$Key;)Z"))
+    public boolean
+    doDaylightCycle(boolean original) {
         return SynchronoConfig.weatherEnabled ? false : original;
     }
 }

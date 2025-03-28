@@ -12,11 +12,12 @@ import xyz.verarr.synchrono.config.SynchronoConfig;
 @Mixin(CustomTimeCycle.class)
 public class CustomTimeCycleMixin {
     @WrapWithCondition(
-            method = "onInitialize()V",
-            at = @At(value = "INVOKE", target = "Lnet/fabricmc/fabric/api/event/Event;register(Ljava/lang/Object;)V"),
-            remap = false
-    )
-    private boolean doNotRegister(Event<CommandRegistrationCallback> instance, Object object) {
+        method = "onInitialize()V",
+        at     = @At(value  = "INVOKE",
+                     target = "Lnet/fabricmc/fabric/api/event/Event;register(Ljava/lang/Object;)V"),
+        remap  = false)
+    private boolean
+    doNotRegister(Event<CommandRegistrationCallback> instance, Object object) {
         if (!SynchronoConfig.removeCommands) {
             Synchrono.LOGGER.info("Not removing commands");
             return true;

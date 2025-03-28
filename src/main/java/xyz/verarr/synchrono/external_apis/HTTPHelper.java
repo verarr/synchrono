@@ -12,24 +12,18 @@ public class HTTPHelper {
         HttpURLConnection conn;
         try {
             conn = (HttpURLConnection) uri.toURL().openConnection();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException e) { throw new RuntimeException(e); }
         try {
             conn.setRequestMethod("GET");
-        } catch (ProtocolException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (ProtocolException e) { throw new RuntimeException(e); }
 
         StringBuilder result = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(
-                new InputStreamReader(conn.getInputStream()))) {
-            for (String line; (line = reader.readLine()) != null; ) {
+        try (BufferedReader reader =
+                 new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+            for (String line; (line = reader.readLine()) != null;) {
                 result.append(line);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        } catch (IOException e) { throw new RuntimeException(e); }
 
         return result.toString();
     }
