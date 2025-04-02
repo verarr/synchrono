@@ -18,12 +18,8 @@ repositories {
 	// for more information about repositories.
 
 	maven {
-		name = "GitHubPackages"
-		url = uri("https://maven.pkg.github.com/eclipseisoffline/customtimecycle")
-		credentials {
-			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
-			password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
-		}
+		name = "eclipseisofflineReleases"
+		url = uri("https://maven.eclipseisoffline.xyz/releases")
 	}
 
 	maven {
