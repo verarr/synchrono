@@ -108,8 +108,8 @@ jar {
 publishing {
 	repositories {
 	    maven {
-	        name = "GithubPackages"
-	        url = uri("https://maven.pkg.github.com/verarr/synchrono")
+	        name = "fvnkitownReleases"
+	        url = uri("https://maven.fvnki.town/releases")
 	        credentials {
 	            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
 	            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
