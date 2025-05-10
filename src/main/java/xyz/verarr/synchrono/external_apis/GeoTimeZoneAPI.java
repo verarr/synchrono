@@ -19,10 +19,9 @@ public class GeoTimeZoneAPI {
         URI uri;
         try {
             Formatter formatter = new Formatter(Locale.ROOT);
-            uri = new URI(API_URL + formatter.format("?latitude=%f&longitude=%f", latitude, longitude));
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+            uri                 = new URI(API_URL
+                                          + formatter.format("?latitude=%f&longitude=%f", latitude, longitude));
+        } catch (URISyntaxException e) { throw new RuntimeException(e); }
 
         String result = HTTPHelper.get(uri);
 
@@ -33,6 +32,7 @@ public class GeoTimeZoneAPI {
             throw new RuntimeException(e + " URL: " + uri + " JSON: " + result);
         }
 
-        return ZoneOffset.of(jsonObject.get("offset").getAsString().replaceFirst("UTC", "").replaceFirst(":.*", ""));
+        return ZoneOffset.of(
+            jsonObject.get("offset").getAsString().replaceFirst("UTC", "").replaceFirst(":.*", ""));
     }
 }
