@@ -2,7 +2,7 @@ package xyz.verarr.synchrono.external_apis;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class GeoTimeZoneAPI {
     private static final String API_URL = "https://api.geotimezone.com/public/timezone";
 
-    public static @NotNull ZoneOffset query(double latitude, double longitude) {
+    public static @NotNull ZoneId query(double latitude, double longitude) {
         URI uri;
         try {
             Formatter formatter = new Formatter(Locale.ROOT);
@@ -32,7 +32,6 @@ public class GeoTimeZoneAPI {
             throw new RuntimeException(e + " URL: " + uri + " JSON: " + result);
         }
 
-        return ZoneOffset.of(
-            jsonObject.get("offset").getAsString().replaceFirst("UTC", "").replaceFirst(":.*", ""));
+        return ZoneId.of(jsonObject.get("iana_timezone").getAsString());
     }
 }

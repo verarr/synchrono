@@ -1,7 +1,6 @@
 package xyz.verarr.synchrono.config;
 
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -97,13 +96,11 @@ public class SynchronoConfig {
         }
     }
 
-    private static final Map<Coordinates, ZoneOffset> zoneOffsetCache = new HashMap<>(1);
+    private static final Map<Coordinates, ZoneId> zoneIdCache = new HashMap<>(1);
 
     public static ZoneId timezone() {
-        return ZoneId.ofOffset(
-            "UTC",
-            zoneOffsetCache.computeIfAbsent(
-                new Coordinates(latitude, longitude),
-                coordinates -> GeoTimeZoneAPI.query(coordinates.latitude, coordinates.longitude)));
+        return zoneIdCache.computeIfAbsent(
+            new Coordinates(latitude, longitude),
+            coordinates -> GeoTimeZoneAPI.query(coordinates.latitude, coordinates.longitude));
     }
 }
