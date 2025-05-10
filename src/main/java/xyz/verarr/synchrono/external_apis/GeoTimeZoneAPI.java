@@ -12,7 +12,7 @@ import com.google.gson.JsonSyntaxException;
 
 import org.jetbrains.annotations.NotNull;
 
-public class GeoNamesAPI {
+public class GeoTimeZoneAPI {
     private static final String API_URL = "http://api.geonames.org/timezoneJSON";
 
     public static @NotNull ZoneOffset query(double latitude, double longitude) {

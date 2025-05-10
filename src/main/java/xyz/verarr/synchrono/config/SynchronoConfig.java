@@ -17,7 +17,7 @@ import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import xyz.verarr.synchrono.external_apis.GeoNamesAPI;
+import xyz.verarr.synchrono.external_apis.GeoTimeZoneAPI;
 
 public class SynchronoConfig {
     public static ConfigClassHandler<SynchronoConfig> HANDLER =
@@ -104,6 +104,6 @@ public class SynchronoConfig {
             "UTC",
             zoneOffsetCache.computeIfAbsent(
                 new Coordinates(latitude, longitude),
-                coordinates -> GeoNamesAPI.query(coordinates.latitude, coordinates.longitude)));
+                coordinates -> GeoTimeZoneAPI.query(coordinates.latitude, coordinates.longitude)));
     }
 }
