@@ -2,7 +2,7 @@ package xyz.verarr.synchrono.external_apis;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.Formatter;
 import java.util.Locale;
 
@@ -12,16 +12,15 @@ import com.google.gson.JsonSyntaxException;
 
 import org.jetbrains.annotations.NotNull;
 
-public class GeoNamesAPI {
-    private static final String API_URL = "http://api.geonames.org/timezoneJSON";
+public class GeoTimeZoneAPI {
+    private static final String API_URL = "https://api.geotimezone.com/public/timezone";
 
-    public static @NotNull ZoneOffset query(double latitude, double longitude) {
+    public static @NotNull ZoneId query(double latitude, double longitude) {
         URI uri;
         try {
             Formatter formatter = new Formatter(Locale.ROOT);
-            uri                 = new URI(
-                API_URL
-                + formatter.format("?lat=%f&lng=%f&username=synchrono_mod", latitude, longitude));
+            uri                 = new URI(API_URL
+                                          + formatter.format("?latitude=%f&longitude=%f", latitude, longitude));
         } catch (URISyntaxException e) { throw new RuntimeException(e); }
 
         String result = HTTPHelper.get(uri);
@@ -33,8 +32,6 @@ public class GeoNamesAPI {
             throw new RuntimeException(e + " URL: " + uri + " JSON: " + result);
         }
 
-        float rawOffset = jsonObject.get("rawOffset").getAsFloat();
-
-        return ZoneOffset.of((rawOffset >= 0 ? "+" : "") + (int) rawOffset);
+        return ZoneId.of(jsonObject.get("iana_timezone").getAsString());
     }
 }
