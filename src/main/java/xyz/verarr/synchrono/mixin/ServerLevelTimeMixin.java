@@ -64,16 +64,16 @@ public class ServerLevelTimeMixin {
         lastUpdateTime      = Instant.now();
         lastUpdateTimeTicks = worldProperties.getTime();
 
-        TimeManager   timeManager = TimeManager.getInstance((ServerWorld) (Object) this);
-        LocalDateTime now         = LocalDateTime.now(SynchronoConfig.timezone());
-        int           daytime     = irlTimeManager.daytimeTicksAt(now);
-        int           nighttime   = irlTimeManager.nighttimeTicksAt(now);
+        TimeManager timeManager = TimeManager.getInstance((ServerWorld) (Object) this);
+        Instant     now         = Instant.now();
+        int         daytime     = irlTimeManager.daytimeTicksAt(now);
+        int         nighttime   = irlTimeManager.nighttimeTicksAt(now);
         if (SynchronoConfig.setRate) {
             Synchrono.LOGGER.info("Setting time rate: {} {}", daytime, nighttime);
             timeManager.setTimeRate(daytime, nighttime);
         }
 
-        long ticks = irlTimeManager.tickAt(LocalDateTime.now(SynchronoConfig.timezone()));
+        long ticks = irlTimeManager.tickAt(Instant.now());
         if (SynchronoConfig.setTime) {
             Synchrono.LOGGER.info("Time is: {}", ticks);
             this.worldProperties.setTimeOfDay(ticks);
