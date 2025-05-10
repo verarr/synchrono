@@ -13,16 +13,16 @@ import com.google.gson.JsonSyntaxException;
 import org.jetbrains.annotations.NotNull;
 
 public class GeoTimeZoneAPI {
-    private static final String API_URL = "http://api.geonames.org/timezoneJSON";
+    private static final String API_URL = "https://api.geotimezone.com/public/timezone";
 
     public static @NotNull ZoneOffset query(double latitude, double longitude) {
         URI uri;
         try {
             Formatter formatter = new Formatter(Locale.ROOT);
-            uri                 = new URI(
-                API_URL
-                + formatter.format("?lat=%f&lng=%f&username=synchrono_mod", latitude, longitude));
-        } catch (URISyntaxException e) { throw new RuntimeException(e); }
+            uri = new URI(API_URL + formatter.format("?latitude=%f&longitude=%f", latitude, longitude));
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
 
         String result = HTTPHelper.get(uri);
 
@@ -33,8 +33,6 @@ public class GeoTimeZoneAPI {
             throw new RuntimeException(e + " URL: " + uri + " JSON: " + result);
         }
 
-        float rawOffset = jsonObject.get("rawOffset").getAsFloat();
-
-        return ZoneOffset.of((rawOffset >= 0 ? "+" : "") + (int) rawOffset);
+        return ZoneOffset.of(jsonObject.get("offset").getAsString().replaceFirst("UTC", "").replaceFirst(":.*", ""));
     }
 }
