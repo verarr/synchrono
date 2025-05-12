@@ -19,31 +19,8 @@ import xyz.verarr.synchrono.config.SynchronoConfig;
 public class SunriseSunsetAPI {
     private static final String API_URL = "https://api.sunrisesunset.io/json";
 
-    private static class SunriseSunsetAPIQuery {
-        LocalDate date;
-        double    latitude, longitude;
-        ZoneId    timezone;
-
-        public SunriseSunsetAPIQuery(LocalDate date, double latitude, double longitude) {
-            this.date      = date;
-            this.latitude  = latitude;
-            this.longitude = longitude;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            SunriseSunsetAPIQuery that = (SunriseSunsetAPIQuery) o;
-            return date.isEqual(that.date) && (Double.compare(that.latitude, latitude) == 0)
-         && (Double.compare(that.longitude, longitude) == 0);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(date, latitude, longitude, timezone);
-        }
-    }
+    private record SunriseSunsetAPIQuery(LocalDate date, double latitude, double longitude){};
+    public record  SunriseSunsetData(Instant sunrise, Instant sunset){};
 
     private static Map<SunriseSunsetAPIQuery, SunriseSunsetData> cache = new HashMap<>();
 
@@ -54,8 +31,6 @@ public class SunriseSunsetAPI {
     }
 
     private static @NotNull SunriseSunsetData query(SunriseSunsetAPIQuery details) {
-        SunriseSunsetData data = new SunriseSunsetData();
-
         URI uri;
         try {
             Formatter formatter = new Formatter(Locale.ROOT);
@@ -89,14 +64,6 @@ public class SunriseSunsetAPI {
             throw new RuntimeException(e + " JSON: " + result);
         }
 
-        data.sunrise = sunrise;
-        data.sunset  = sunset;
-
-        return data;
-    }
-
-    public static class SunriseSunsetData {
-        public Instant sunrise;
-        public Instant sunset;
+        return new SunriseSunsetData(sunrise, sunset);
     }
 }

@@ -64,22 +64,22 @@ public class IRLTimeManager extends PersistentState {
         today_data     = querySunriseSunsetAPI(today);
         tomorrow_data  = querySunriseSunsetAPI(tomorrow);
 
-        if (instant.isBefore(today_data.sunrise)) {
+        if (instant.isBefore(today_data.sunrise())) {
             // before sunrise - use yesterday_data (and today_data)
-            Duration night_length = Duration.between(yesterday_data.sunset, today_data.sunrise);
-            Duration since_sunset = Duration.between(yesterday_data.sunset, instant);
+            Duration night_length = Duration.between(yesterday_data.sunset(), today_data.sunrise());
+            Duration since_sunset = Duration.between(yesterday_data.sunset(), instant);
             double   tick_scalar  = (double) since_sunset.toMillis() / night_length.toMillis();
             ticks -= (TICKS_PER_HALF_DAY) - (long) (TICKS_PER_HALF_DAY * tick_scalar);
-        } else if (instant.isAfter(today_data.sunset)) {
+        } else if (instant.isAfter(today_data.sunset())) {
             // after sunset - use tomorrow_data (and today_data)
-            Duration night_length  = Duration.between(today_data.sunset, tomorrow_data.sunrise);
-            Duration since_sunset  = Duration.between(today_data.sunset, instant);
+            Duration night_length  = Duration.between(today_data.sunset(), tomorrow_data.sunrise());
+            Duration since_sunset  = Duration.between(today_data.sunset(), instant);
             double   tick_scalar   = (double) since_sunset.toMillis() / night_length.toMillis();
             ticks                 += TICKS_PER_HALF_DAY + (long) (TICKS_PER_HALF_DAY * tick_scalar);
         } else {
             // daytime - only use today_data
-            Duration day_length     = Duration.between(today_data.sunrise, today_data.sunset);
-            Duration since_sunrise  = Duration.between(today_data.sunrise, instant);
+            Duration day_length     = Duration.between(today_data.sunrise(), today_data.sunset());
+            Duration since_sunrise  = Duration.between(today_data.sunrise(), instant);
             double   tick_scalar    = (double) since_sunrise.toMillis() / day_length.toMillis();
             ticks                  += (long) (TICKS_PER_HALF_DAY * tick_scalar);
         }
@@ -126,17 +126,17 @@ public class IRLTimeManager extends PersistentState {
         todayData     = querySunriseSunsetAPI(today);
         tomorrowData  = querySunriseSunsetAPI(tomorrow);
 
-        if (instant.isBefore(todayData.sunrise)) {
+        if (instant.isBefore(todayData.sunrise())) {
             // update next daytime aka today
-            return (int) (Duration.between(todayData.sunrise, todayData.sunset).toSeconds()
+            return (int) (Duration.between(todayData.sunrise(), todayData.sunset()).toSeconds()
                           * SERVER_TICKS_PER_SECOND);
-        } else if (instant.isAfter(todayData.sunset)) {
+        } else if (instant.isAfter(todayData.sunset())) {
             // update next daytime aka tomorrow
-            return (int) (Duration.between(tomorrowData.sunrise, tomorrowData.sunset).toSeconds()
+            return (int) (Duration.between(tomorrowData.sunrise(), tomorrowData.sunset()).toSeconds()
                           * SERVER_TICKS_PER_SECOND);
         } else {
             // update current daytime
-            return (int) (Duration.between(todayData.sunrise, todayData.sunset).toSeconds()
+            return (int) (Duration.between(todayData.sunrise(), todayData.sunset()).toSeconds()
                           * SERVER_TICKS_PER_SECOND);
         }
     }
@@ -152,17 +152,17 @@ public class IRLTimeManager extends PersistentState {
         todayData     = querySunriseSunsetAPI(today);
         tomorrowData  = querySunriseSunsetAPI(tomorrow);
 
-        if (instant.isBefore(todayData.sunrise)) {
+        if (instant.isBefore(todayData.sunrise())) {
             // update current nighttime aka yesterday and today
-            return (int) (Duration.between(yesterdayData.sunset, todayData.sunrise).toSeconds()
+            return (int) (Duration.between(yesterdayData.sunset(), todayData.sunrise()).toSeconds()
                           * SERVER_TICKS_PER_SECOND);
-        } else if (instant.isAfter(todayData.sunset)) {
+        } else if (instant.isAfter(todayData.sunset())) {
             // update current nighttime aka today and tomorrow
-            return (int) (Duration.between(todayData.sunset, tomorrowData.sunrise).toSeconds()
+            return (int) (Duration.between(todayData.sunset(), tomorrowData.sunrise()).toSeconds()
                           * SERVER_TICKS_PER_SECOND);
         } else {
             // update next nighttime aka today and tomorrow
-            return (int) (Duration.between(todayData.sunset, tomorrowData.sunrise).toSeconds()
+            return (int) (Duration.between(todayData.sunset(), tomorrowData.sunrise()).toSeconds()
                           * SERVER_TICKS_PER_SECOND);
         }
     }
