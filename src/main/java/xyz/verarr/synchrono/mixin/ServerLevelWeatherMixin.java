@@ -17,9 +17,7 @@ import net.minecraft.world.level.storage.LevelStorage;
 import net.minecraft.world.spawner.SpecialSpawner;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -32,8 +30,7 @@ import xyz.verarr.synchrono.weather_models.WeatherModel;
 
 @Mixin(ServerWorld.class)
 public class ServerLevelWeatherMixin {
-    @Shadow @Final private ServerWorldProperties worldProperties;
-    @Unique private Instant                      lastUpdateWeather = Instant.MIN;
+    @Unique private Instant lastUpdateWeather = Instant.MIN;
 
     @Unique
     public void updateWeather() {
