@@ -45,7 +45,6 @@ See the [wiki](https://github.com/verarr/synchrono/wiki/Configuration)
 This mod periodically queries some APIs on the internet to retrieve necessary data to function.
 
 * [SunriseSunset.io](https://sunrisesunset.io/) - needed for accurate localized sunrise and sunset timestamps.
-* [GeoNames.org](https://geonames.org) - needed for automatically computing the time zone of a location.
 * [Open-Meteo.com](https://open-meteo.com) - needed for realtime localized weather updates.
 
 If your server doesn't have access to these, it might crash with the mod installed.
