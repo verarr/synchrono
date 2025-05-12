@@ -22,7 +22,7 @@ public class IRLTimeManager extends PersistentState {
 
     public LocalDate firstStartDate;
 
-    public IRLTimeManager() { this.firstStartDate = LocalDate.now(SynchronoConfig.timezone()); }
+    public IRLTimeManager() { this.firstStartDate = LocalDate.now(ZoneId.of("UTC")); }
 
     public IRLTimeManager(long firstStartDate) {
         this.firstStartDate = LocalDate.ofEpochDay(firstStartDate);
@@ -45,44 +45,41 @@ public class IRLTimeManager extends PersistentState {
 
     private SunriseSunsetData querySunriseSunsetAPI(LocalDate localDate) {
         return SunriseSunsetAPI.query(localDate, SynchronoConfig.latitude,
-                                      SynchronoConfig.longitude, SynchronoConfig.timezone());
+                                      SynchronoConfig.longitude);
     }
 
-    public long tickAt(LocalDateTime dateTime) {
+    public long tickAt(Instant instant) {
         long ticks;
 
-        long days = ChronoUnit.DAYS.between(firstStartDate, dateTime.toLocalDate());
-        ticks     = days * TICKS_PER_DAY;
+        long days =
+            ChronoUnit.DAYS.between(firstStartDate, instant.atZone(ZoneId.of("UTC")).toLocalDate());
+        ticks = days * TICKS_PER_DAY;
         LocalDate yesterday, today, tomorrow;
-        yesterday = dateTime.minusDays(1).toLocalDate();
-        today     = dateTime.toLocalDate();
-        tomorrow  = dateTime.plusDays(1).toLocalDate();
+        yesterday = instant.minus(Duration.ofDays(1)).atZone(ZoneId.of("UTC")).toLocalDate();
+        today     = instant.atZone(ZoneId.of("UTC")).toLocalDate();
+        tomorrow  = instant.plus(Duration.ofDays(1)).atZone(ZoneId.of("UTC")).toLocalDate();
 
         SunriseSunsetData yesterday_data, today_data, tomorrow_data;
         yesterday_data = querySunriseSunsetAPI(yesterday);
         today_data     = querySunriseSunsetAPI(today);
         tomorrow_data  = querySunriseSunsetAPI(tomorrow);
 
-        if (dateTime.isBefore(dateTime.toLocalDate().atTime(today_data.sunrise))) {
+        if (instant.isBefore(today_data.sunrise)) {
             // before sunrise - use yesterday_data (and today_data)
-            Duration night_length = Duration.between(yesterday.atTime(yesterday_data.sunset),
-                                                     today.atTime(today_data.sunrise));
-            Duration since_sunset =
-                Duration.between(yesterday.atTime(yesterday_data.sunset), dateTime);
-            double tick_scalar  = (double) since_sunset.toMillis() / night_length.toMillis();
-            ticks              -= (TICKS_PER_HALF_DAY) - (long) (TICKS_PER_HALF_DAY * tick_scalar);
-        } else if (dateTime.isAfter(today.atTime(today_data.sunset))) {
+            Duration night_length = Duration.between(yesterday_data.sunset, today_data.sunrise);
+            Duration since_sunset = Duration.between(yesterday_data.sunset, instant);
+            double   tick_scalar  = (double) since_sunset.toMillis() / night_length.toMillis();
+            ticks -= (TICKS_PER_HALF_DAY) - (long) (TICKS_PER_HALF_DAY * tick_scalar);
+        } else if (instant.isAfter(today_data.sunset)) {
             // after sunset - use tomorrow_data (and today_data)
-            Duration night_length  = Duration.between(today.atTime(today_data.sunset),
-                                                      tomorrow.atTime(tomorrow_data.sunrise));
-            Duration since_sunset  = Duration.between(today.atTime(today_data.sunset), dateTime);
+            Duration night_length  = Duration.between(today_data.sunset, tomorrow_data.sunrise);
+            Duration since_sunset  = Duration.between(today_data.sunset, instant);
             double   tick_scalar   = (double) since_sunset.toMillis() / night_length.toMillis();
             ticks                 += TICKS_PER_HALF_DAY + (long) (TICKS_PER_HALF_DAY * tick_scalar);
         } else {
             // daytime - only use today_data
-            Duration day_length =
-                Duration.between(today.atTime(today_data.sunrise), today.atTime(today_data.sunset));
-            Duration since_sunrise  = Duration.between(today.atTime(today_data.sunrise), dateTime);
+            Duration day_length     = Duration.between(today_data.sunrise, today_data.sunset);
+            Duration since_sunrise  = Duration.between(today_data.sunrise, instant);
             double   tick_scalar    = (double) since_sunrise.toMillis() / day_length.toMillis();
             ticks                  += (long) (TICKS_PER_HALF_DAY * tick_scalar);
         }
@@ -96,88 +93,77 @@ public class IRLTimeManager extends PersistentState {
         return ticks;
     }
 
-    public int daytimeTicksAt(LocalDateTime dateTime) {
+    public int daytimeTicksAt(Instant instant) {
         int daytimeTicks;
 
-        if (!SynchronoConfig.invert) daytimeTicks = hardDaytimeTicksAt(dateTime);
-        else daytimeTicks = hardNighttimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
+        if (!SynchronoConfig.invert) daytimeTicks = hardDaytimeTicksAt(instant);
+        else daytimeTicks = hardNighttimeTicksAt(instant) + TICKS_PER_HALF_DAY;
 
         daytimeTicks = (int) Math.round(daytimeTicks / SynchronoConfig.scalar);
 
         return daytimeTicks;
     }
 
-    public int nighttimeTicksAt(LocalDateTime dateTime) {
+    public int nighttimeTicksAt(Instant instant) {
         int nighttimeTicks;
 
-        if (!SynchronoConfig.invert) nighttimeTicks = hardNighttimeTicksAt(dateTime);
-        else nighttimeTicks = hardDaytimeTicksAt(dateTime) + TICKS_PER_HALF_DAY;
+        if (!SynchronoConfig.invert) nighttimeTicks = hardNighttimeTicksAt(instant);
+        else nighttimeTicks = hardDaytimeTicksAt(instant) + TICKS_PER_HALF_DAY;
 
         nighttimeTicks = (int) Math.round(nighttimeTicks / SynchronoConfig.scalar);
 
         return nighttimeTicks;
     }
 
-    private int hardDaytimeTicksAt(LocalDateTime dateTime) {
+    private int hardDaytimeTicksAt(Instant instant) {
         LocalDate yesterday, today, tomorrow;
-        yesterday = dateTime.minusDays(1).toLocalDate();
-        today     = dateTime.toLocalDate();
-        tomorrow  = dateTime.plusDays(1).toLocalDate();
+        yesterday = instant.minus(Duration.ofDays(1)).atZone(ZoneId.of("UTC")).toLocalDate();
+        today     = instant.atZone(ZoneId.of("UTC")).toLocalDate();
+        tomorrow  = instant.plus(Duration.ofDays(1)).atZone(ZoneId.of("UTC")).toLocalDate();
 
         SunriseSunsetData yesterdayData, todayData, tomorrowData;
         yesterdayData = querySunriseSunsetAPI(yesterday);
         todayData     = querySunriseSunsetAPI(today);
         tomorrowData  = querySunriseSunsetAPI(tomorrow);
 
-        if (dateTime.isBefore(today.atTime(todayData.sunrise))) {
+        if (instant.isBefore(todayData.sunrise)) {
             // update next daytime aka today
-            return (int) Duration
-                       .between(today.atTime(todayData.sunrise), today.atTime(todayData.sunset))
-                       .toSeconds()
-          * SERVER_TICKS_PER_SECOND;
-        } else if (dateTime.isAfter(today.atTime(todayData.sunset))) {
+            return (int) (Duration.between(todayData.sunrise, todayData.sunset).toSeconds()
+                          * SERVER_TICKS_PER_SECOND);
+        } else if (instant.isAfter(todayData.sunset)) {
             // update next daytime aka tomorrow
-            return (int) Duration.between(tomorrowData.sunrise, tomorrowData.sunset).toSeconds()
-          * SERVER_TICKS_PER_SECOND;
+            return (int) (Duration.between(tomorrowData.sunrise, tomorrowData.sunset).toSeconds()
+                          * SERVER_TICKS_PER_SECOND);
         } else {
             // update current daytime
-            return (int) Duration.between(todayData.sunrise, todayData.sunset).toSeconds()
-          * SERVER_TICKS_PER_SECOND;
+            return (int) (Duration.between(todayData.sunrise, todayData.sunset).toSeconds()
+                          * SERVER_TICKS_PER_SECOND);
         }
     }
 
-    private int hardNighttimeTicksAt(LocalDateTime dateTime) {
+    private int hardNighttimeTicksAt(Instant instant) {
         LocalDate yesterday, today, tomorrow;
-        yesterday = dateTime.minusDays(1).toLocalDate();
-        today     = dateTime.toLocalDate();
-        tomorrow  = dateTime.plusDays(1).toLocalDate();
+        yesterday = instant.minus(Duration.ofDays(1)).atZone(ZoneId.of("UTC")).toLocalDate();
+        today     = instant.atZone(ZoneId.of("UTC")).toLocalDate();
+        tomorrow  = instant.plus(Duration.ofDays(1)).atZone(ZoneId.of("UTC")).toLocalDate();
 
         SunriseSunsetData yesterdayData, todayData, tomorrowData;
         yesterdayData = querySunriseSunsetAPI(yesterday);
         todayData     = querySunriseSunsetAPI(today);
         tomorrowData  = querySunriseSunsetAPI(tomorrow);
 
-        if (dateTime.isBefore(today.atTime(todayData.sunrise))) {
+        if (instant.isBefore(todayData.sunrise)) {
             // update current nighttime aka yesterday and today
-            return (int) Duration
-                       .between(yesterday.atTime(yesterdayData.sunset),
-                                today.atTime(todayData.sunrise))
-                       .toSeconds()
-          * SERVER_TICKS_PER_SECOND;
-        } else if (dateTime.isAfter(today.atTime(todayData.sunset))) {
+            return (int) (Duration.between(yesterdayData.sunset, todayData.sunrise).toSeconds()
+                          * SERVER_TICKS_PER_SECOND);
+        } else if (instant.isAfter(todayData.sunset)) {
             // update current nighttime aka today and tomorrow
-            return (int) Duration
-                       .between(today.atTime(todayData.sunset),
-                                tomorrow.atTime(tomorrowData.sunrise))
-                       .toSeconds()
-          * SERVER_TICKS_PER_SECOND;
+            return (int) (Duration.between(todayData.sunset, tomorrowData.sunrise).toSeconds()
+                          * SERVER_TICKS_PER_SECOND);
         } else {
             // update next nighttime aka today and tomorrow
-            return (int) Duration
-                       .between(yesterday.atTime(todayData.sunset),
-                                today.atTime(tomorrowData.sunrise))
-                       .toSeconds()
-          * SERVER_TICKS_PER_SECOND;
+            return (int) (Duration.between(todayData.sunset, tomorrowData.sunrise).toSeconds()
+                          * SERVER_TICKS_PER_SECOND);
         }
     }
 }

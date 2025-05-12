@@ -1,11 +1,5 @@
 package xyz.verarr.synchrono.config;
 
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.GsonBuilder;
 
@@ -17,7 +11,6 @@ import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import net.fabricmc.loader.api.FabricLoader;
-import xyz.verarr.synchrono.external_apis.GeoNamesAPI;
 
 public class SynchronoConfig {
     public static ConfigClassHandler<SynchronoConfig> HANDLER =
@@ -72,38 +65,4 @@ public class SynchronoConfig {
     @SerialEntry public static boolean setRate        = true;
     @SerialEntry public static boolean preventSleep   = true;
     @SerialEntry public static boolean removeCommands = true;
-
-    private static class Coordinates {
-        public double latitude;
-        public double longitude;
-
-        public Coordinates(double lat, double lng) {
-            this.latitude  = lat;
-            this.longitude = lng;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Coordinates that = (Coordinates) o;
-            return Double.compare(that.latitude, latitude) == 0
-         && Double.compare(that.longitude, longitude) == 0;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(latitude, longitude);
-        }
-    }
-
-    private static final Map<Coordinates, ZoneOffset> zoneOffsetCache = new HashMap<>(1);
-
-    public static ZoneId timezone() {
-        return ZoneId.ofOffset(
-            "UTC",
-            zoneOffsetCache.computeIfAbsent(
-                new Coordinates(latitude, longitude),
-                coordinates -> GeoNamesAPI.query(coordinates.latitude, coordinates.longitude)));
-    }
 }
