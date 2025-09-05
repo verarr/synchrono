@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> I've moved the repo for this project to Codeberg: [codeberg.org/verarr/synchrono](https://codeberg.org/verarr/synchrono) (along with some of my other projects)  
+> The reason for this is because I'm unhappy with the direction GitHub is taking, especially in terms of AI usage.
+> I'll be deleting this repo from GitHub soon.
+
 # Synchrono
 
 A mod for Minecraft that syncs the in-game daylight cycle to a location in real life.
